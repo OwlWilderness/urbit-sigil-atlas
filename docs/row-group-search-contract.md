@@ -1,0 +1,21 @@
+# Row-group mini-map contract
+
+Status: implemented and qualified. Current source/receipt bindings are in docs/verification.json; live row-group semantics and desktop/mobile integration passed.
+User explicitly confirmed: combine boxes1/2 as the top row, boxes3/4 as bottom row, then combine the two rows. UI must have ONE compact native-order mini2x2 in right filter card, not duplicate connector glyph lists/group summaries. Main assembly and filter card must have equal desktop height AND aligned tops/bottoms. Preserve separate full-width top shapes and lower action/result rows.
+
+## API
+- GET /api/v1/candidates gains optional `grouping=rows`. Omitted grouping retains EXACT existing linear AND-before-OR behavior. Any other explicit grouping string is invalid (400). Response schema/order/pagination/star restriction unchanged.
+- In rows mode `join1` combines active slots0/1 (top row), `join3` combines active slots2/3 (bottom row), and `join2` combines nonempty top/bottom rows. Tokens `and|or`, default and. OR inclusive. Formula ((A join1 B) join2 (C join3 D)), with absent predicates removed rather than interpreted true.
+- If a row has one active leaf, use that leaf without row operator; if a row is empty, omit that whole row and its middle operator. Both empty = unconstrained. Exact+shape for one leaf still intersect locally.
+- Reject explicit join1 unless slots0 AND1 active; join3 unless slots2 AND3 active; join2 unless at least one active leaf in EACH row. Reject malformed/duplicate/unknown operators as before.
+- A selected star fences the entire expression. Global lexical tuple ordering, numeric selected-star ordering, zero-high-word exclusion and scalable exact counts/pages remain. Compile row groups into bounded monotone DNF masks and reuse existing suffix-DP/unranking; do not scan identities or concatenate overlapping result lists.
+
+## Frontend
+- Workshop now uses rows grouping, sending grouping=rows on candidate queries. Keep data-join-before=1 (top),=2 (middle),=3 (bottom) and values and/or so keyboard/controller hooks remain recognizable, but visible/ARIA meanings MUST be row-based, not old before-box meaning.
+- Use a NEW independent persistence key for row operators, e.g sigil-atlas:rowJoins. Do not silently reinterpret old sigil-atlas:joins; leave old stored operators untouched. New row operators default all AND, validated array length3/tokens. Existing slots/enabled/mode/star remain untouched. A brief one-time migration notice is permitted if needed, not paragraphs.
+- ONE mini2x2 shows each slot exactly once in native order, with top/bottom horizontal operator selects BETWEEN mini leaves and middle select BETWEEN ROWS. Empty/ignored mini cells remain in place dimmed, reflecting main-board values/eye state; their inapplicable operators are disabled/hidden without collapsing the mini-map. Actual typed values and actual family predicates must be represented honestly. No duplicate condition-chip lists, outlined summary groups or long help underneath.
+- Accessible names: Top row operator, Between rows operator, Bottom row operator. Four mini thumbnails have meaningful box/position/predicate labels. Preserve native checkbox/keyboard/focus behavior, hidden Copy, literal zod placeholders, clear/trash/native drag and genuine SVGs.
+- Desktop1360 main assembly outer region including external input/eye rows and filter-card outer border have same top, bottom and height within2px in populated/sparse/empty states. Keep main artwork square. Make filter content compact enough to fit natural main-board height, without clipping/scrolling ordinary controls or adding a tall duplicate diagram. Latest owner correction: the composition pair remains adjacent and equal-width/equal-height across preview-sized widths; at375px confine horizontal scrolling to that row instead of stacking or overflowing the whole document.
+
+## Ownership / delivery
+Backend worker owns API/tests/docsAPI/captures only; frontend worker owns app/controller/CSS/template/frontend tests/docs/generated site. Parent owns final runtime adoption, proof composition, integrated row-mode checks, preview and ZIPs. Default legacy API proof remains backward-compatible, not a substitute for new row-mode result proof. Never fake responses or mutate real var/browser state during tests.

@@ -1,0 +1,1064 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Complete Urbit prefix and suffix glyph atlas, grouped by shape, with a local name workshop."><title>API · Sigil Atlas</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="workshop.css"><script defer src="workshop.js"></script><script defer src="app.js"></script></head><body id="top" data-page="api.html"><a class="skip" href="#main">Skip to content</a><header class="masthead"><div class="header-inner"><a class="brand" href="index.html">Sigil Atlas<small>URBIT</small></a><nav class="main-nav" aria-label="Main navigation"><a href="index.html">All glyphs</a><a href="prefixes.html">Prefixes</a><a href="suffixes.html">Suffixes</a><a href="shortlist.html">Shortlist</a><a href="workshop.html">Workshop</a><a href="api.html" aria-current="page">API</a></nav><a href="#top" class="top-link">Back to top ↑</a></div></header><div class="layout"><aside class="sidebar"><h2>Browse by shape</h2><nav aria-label="Shape navigation"><a class="shape-link" data-shape-link="circle" href="index.html?shape=circle#shape-circle"><img src="assets/glyphs/prefix-bar-none.svg" width="22" height="22" alt="">Circles</a><a class="shape-link" data-shape-link="square" href="index.html?shape=square#shape-square"><img src="assets/glyphs/prefix-bin-none.svg" width="22" height="22" alt="">Squares</a><a class="shape-link" data-shape-link="leaf-down" href="index.html?shape=leaf-down#shape-leaf-down"><img src="assets/glyphs/prefix-bal-none.svg" width="22" height="22" alt="">Leaves ↘</a><a class="shape-link" data-shape-link="leaf-up" href="index.html?shape=leaf-up#shape-leaf-up"><img src="assets/glyphs/prefix-doc-none.svg" width="22" height="22" alt="">Leaves ↗</a><a class="shape-link" data-shape-link="q-tl" href="index.html?shape=q-tl#shape-q-tl"><img src="assets/glyphs/prefix-fad-none.svg" width="22" height="22" alt="">Quarter · top-left</a><a class="shape-link" data-shape-link="q-tr" href="index.html?shape=q-tr#shape-q-tr"><img src="assets/glyphs/prefix-bac-none.svg" width="22" height="22" alt="">Quarter · top-right</a><a class="shape-link" data-shape-link="q-bl" href="index.html?shape=q-bl#shape-q-bl"><img src="assets/glyphs/prefix-lis-none.svg" width="22" height="22" alt="">Quarter · bottom-left</a><a class="shape-link" data-shape-link="q-br" href="index.html?shape=q-br#shape-q-br"><img src="assets/glyphs/prefix-bon-none.svg" width="22" height="22" alt="">Quarter · bottom-right</a><a class="shape-link" data-shape-link="d-left" href="index.html?shape=d-left#shape-d-left"><img src="assets/glyphs/prefix-bil-none.svg" width="22" height="22" alt="">Rounded left</a><a class="shape-link" data-shape-link="d-right" href="index.html?shape=d-right#shape-d-right"><img src="assets/glyphs/suffix-ber-none.svg" width="22" height="22" alt="">Rounded right</a><a class="shape-link" data-shape-link="d-top" href="index.html?shape=d-top#shape-d-top"><img src="assets/glyphs/prefix-hob-none.svg" width="22" height="22" alt="">Rounded top</a><a class="shape-link" data-shape-link="d-bottom" href="index.html?shape=d-bottom#shape-d-bottom"><img src="assets/glyphs/suffix-der-none.svg" width="22" height="22" alt="">Rounded bottom</a></nav><p>Planet names follow<br><b>prefix + suffix</b><br><b>prefix + suffix</b><br><br>Detailed glyphs, with a small silhouette in the corner.</p></aside><main id="main" tabindex="-1"><div class="page-head"><div><p class="eyebrow">A field guide to Urbit names</p><h1>The local API</h1><p class="intro">A separate, versioned backend for name composition and future tools.</p></div><span class="notation">~pre·suf–pre·suf</span></div><noscript><p>JavaScript is off. Browse every glyph and follow the navigation normally; search, shortlist and the workshop require JavaScript.</p></noscript><div class="api-docs"><p id="backend-status" class="api-status">Checking local API…</p><h2>One catalogue, two modes.</h2><p><b>Free mode</b> combines glyphs without a spawning-star restriction. <b>Star mode</b> checks the exact star you supply and refuses a final save when the planet belongs elsewhere. Neither mode creates an on-chain ship.</p><table><thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th></tr></thead><tbody><tr><td>GET</td><td><code>/api/v1/health</code></td><td>Runtime status</td></tr><tr><td>GET</td><td><code>/api/v1/glyphs</code></td><td>512 glyphs; filter kind, shape and q</td></tr><tr><td>GET</td><td><code>/api/v1/glyphs/prefix/rad</code></td><td>Retrieve a specific glyph, metadata and both SVG variants</td></tr><tr><td>GET</td><td><code>/api/v1/glyphs/prefix/rad/svg?detail=none</code></td><td>Retrieve original silhouette SVG bytes</td></tr><tr><td>GET</td><td><code>/api/v1/candidates</code></td><td>Shape or syllable combinations across all stars, optionally filtered by star</td></tr><tr><td>GET</td><td><code>/api/v1/shapes</code></td><td>Shape catalogue</td></tr><tr><td>POST</td><td><code>/api/v1/compose</code></td><td>Preview and validate four syllables</td></tr><tr><td>GET / POST</td><td><code>/api/v1/compositions</code></td><td>Read / save local composition records</td></tr><tr><td>GET</td><td><code>/api/v1/planets</code></td><td>Search descendants of any canonical star</td></tr></tbody></table><h2>Compose a name</h2><pre>POST /api/v1/compose
+Origin: http://127.0.0.1:8741
+Content-Type: application/json
+
+{
+  "syllables": ["bot", "myr", "rad", "ret"],
+  "mode": "star",
+  "star": "~pacfyl"
+}</pre><h2>Search any star</h2><pre>GET /api/v1/planets?star=~pacfyl&amp;syllables=rad,bot&amp;limit=50
+
+GET /api/v1/planets?star=~pacfyl&amp;endings=it,yr,oc,ef&amp;minMatches=3</pre><p>Star identifiers are validated exactly; invalid input is not silently repaired. Parentage is computed, while live ownership and spawn availability remain unchecked.</p><h2>Portable by design</h2><p>The atlas pages work as static files, with no CDN or font downloads. The API is a separate Node process and defaults to loopback only. When the API is offline, catalogue browsing and your local shortlist remain usable.</p><p><a href="provenance.json">Glyph provenance</a> · <a href="GLYPH-LICENSE.txt">Upstream glyph license</a></p></div><section class="api-docs expanded-reference"><h2>Complete requests and responses</h2><p>Endpoint contracts, request bodies, headers, query parameters, captured responses and error cases. Demo record UUIDs and timestamps come from an isolated server, not your saved compositions.</p><p><a href="reference/api.txt">Complete API reference</a> · <a href="reference/examples/README.txt">All executable examples with responses</a></p><details class="api-example"><summary>Read the full endpoint reference</summary><pre class="reference-text"># Local workshop API
+
+Run `node server/index.cjs` from the project root after installing the root dependencies. Node 20+; native HTTP, no framework. The CLI binds **127.0.0.1**, `PORT=8741` by default. `DATA_DIR` overrides the default project `var/` directory. Import `require('./server/index.cjs').createServer({dataDir, siteDir})` for an unstarted server; the default static root is project `site/`.
+
+This is a **local single-user workshop**, not a public hardened API, wallet, ownership service, spawner or availability checker. Parentage means original spawning star, not current sponsorship. No requests contact Urbit or a blockchain.
+
+## Request safety and errors
+
+- Host must be exactly `127.0.0.1:&lt;actual-port&gt;` or `localhost:&lt;actual-port&gt;` and the peer must be loopback. Do not reverse-proxy or expose this server publicly.
+- Every POST requires `Origin: http://&lt;exact-Host&gt;` and `Content-Type: application/json` (optional `; charset=utf-8`). Missing origins and cross-site fetches fail. No CORS headers are emitted.
+- JSON bodies are limited to 8,192 bytes. Encoded bodies are unsupported. Unknown fields, query parameters and duplicate query keys fail; identifiers are never trimmed, case-folded or repaired.
+- JSON errors are `{ &quot;error&quot;: { &quot;code&quot;: &quot;INVALID_INPUT&quot;, &quot;message&quot;: &quot;...&quot; } }`. Statuses: 400 invalid input, 403 unsafe host/origin, 404 unknown route/file, 409 ineligible star save, 413 oversized body, 415 media type, 500 internal/storage error. Internal errors do not expose filesystem paths.
+- Static GET/HEAD serves recognized HTML/CSS/JS/JSON/SVG/image/font/text MIME types. No directory listing, dotfiles, traversal or symlink descendants. The root maps to `index.html`. Missing static files return structured JSON 404.
+
+## Endpoints
+
+### `GET /api/v1/health`
+
+`{ok:true, localOnly:true, authority:false}`
+
+### `GET /api/v1/glyphs?kind=prefix&amp;shape=circle&amp;q=rad`
+
+Returns `{items:[{kind,syllable,shape}], total}`. All filters are optional and combined with AND. `kind` is exactly `prefix` or `suffix`; `shape` is an exact atlas shape ID; `q` is a lowercase substring of the syllable, up to 40 letters (empty matches all). The snapshot contains 256 prefixes and 256 suffixes. It is loaded from `server/data/glyphs.json`; original fragment provenance is retained at `server/data/provenance.json`. SVG presentation assets are served separately by the frontend.
+
+### `GET /api/v1/shapes`
+
+Returns `{items:[{id,label}]}` for the 12 distinct atlas shape IDs. IDs retain the source spellings (`circle`, `square`, `leaf-down`, `leaf-up`, `q-tl`, `q-tr`, `q-bl`, `q-br`, `d-left`, `d-top`, `d-right`, `d-bottom`); labels are display strings, not input aliases.
+
+### `GET /api/v1/glyphs/{kind}/{syllable}`
+
+Retrieve one **specific positional glyph**, not a substring search. `kind` must be exactly `prefix` or `suffix`. `syllable` must be an exact three-letter entry in that kind's table. Wrong kind is 400; an absent entry (including a syllable from the wrong positional table) is 404. Uppercase, spaces, percent-encoded aliases and other repairs are not accepted. No query parameters are accepted.
+
+Returns `{kind,syllable,shape,assets:{full,silhouette},svg:{full,silhouette}}`. The asset URLs are `/assets/glyphs/{kind}-{syllable}-default.svg` and `/assets/glyphs/{kind}-{syllable}-none.svg`. The `svg` fields contain the original UTF-8 SVG text, not a regenerated or simplified substitute. The silhouette is the existing `none` asset. Reads occur only after table validation, from the configured `siteDir/assets/glyphs`; missing or symlinked asset descendants are refused. The static asset root is trusted local presentation data, not arbitrary user input.
+
+[Actual metadata request and complete response, including both SVG strings](api-examples/README.md#glyph-prefix-rad).
+
+### `GET /api/v1/glyphs/{kind}/{syllable}/svg?detail=default`
+
+Same exact positional identifier rules as above. `detail` is optional, default `default`; only `default` or `none` is accepted. Unknown or duplicate parameters fail 400, including blank `detail`. Returns HTTP 200 `image/svg+xml; charset=utf-8`, original file bytes, `Content-Length`, and `X-Content-Type-Options: nosniff`. There is no JSON wrapper on successful SVG responses; failures use the standard JSON error envelope.
+
+[Actual full SVG request/response](api-examples/README.md#glyph-rad-default) and [silhouette request/response](api-examples/README.md#glyph-rad-none). Exact captured SVG files are retained beside those examples.
+
+### `POST /api/v1/compose`
+
+Input:
+
+```json
+{&quot;syllables&quot;:[&quot;bot&quot;,&quot;myr&quot;,&quot;rad&quot;,&quot;ret&quot;],&quot;mode&quot;:&quot;star&quot;,&quot;star&quot;:&quot;~pacfyl&quot;}
+```
+
+Requires exactly four valid table slots: prefix, suffix, prefix, suffix. Mode must be explicitly `free` or `star`. Star mode requires an exact canonical star, including `~`. Free mode omits `star` (or supplies null).
+
+Returns HTTP 200:
+
+```json
+{&quot;name&quot;:&quot;~botmyr-radret&quot;,&quot;id&quot;:&quot;1082103209&quot;,&quot;kind&quot;:&quot;planet&quot;,&quot;canonical&quot;:true,&quot;parent&quot;:&quot;~pacfyl&quot;,&quot;mode&quot;:&quot;star&quot;,&quot;star&quot;:&quot;~pacfyl&quot;,&quot;eligible&quot;:true,&quot;syllables&quot;:[&quot;bot&quot;,&quot;myr&quot;,&quot;rad&quot;,&quot;ret&quot;]}
+```
+
+`name` always preserves the chosen slots. `canonical` requires the exact urbit-ob decode/encode roundtrip. Noncanonical combinations have null `id`, `kind`, and `parent`; they are not silently replaced with their canonical roundtrip. Free mode always reports `eligible:true` **for creative saving only**, including noncanonical combinations. Star mode reports eligible only for a canonical planet whose computed `sein(name)` is the supplied star. An otherwise valid preview outside that star returns 200 with `eligible:false`, retaining the original name.
+
+### `POST /api/v1/compositions`
+
+Same input as compose, plus optional `label` (string, at most 120 UTF-16 code units; no control characters). Eligible inputs return HTTP 201 `{item:{...compositionFields,id:&lt;recordUUID&gt;,label,createdAt}}`. `label` defaults to the empty string, `createdAt` is UTC ISO format. **In saved records, `id` is the record UUID, replacing the preview's numeric point ID.** Recompute a point ID from the canonical name if needed. `mode:&quot;free&quot;` identifies creative records explicitly; canonical false is preserved. Star-mode ineligible inputs fail 409 before any storage write.
+
+Storage is lazy: one UUID-named JSON record per save, with private 0700 directory / 0600 files, exclusive temporary JSON creation, file fsync, atomic rename and directory fsync. Existing data directories must already have mode 0700 and have no symlink path components. `dataDir` and `siteDir` must not overlap. Symlink record leaves are refused. Crash-interrupted `.tmp.json` files are ignored rather than auto-deleted on startup. Disk/fsync failures return 500; after a directory-fsync failure a record may already exist, so inspect the list before retrying. Filesystem safety assumes no hostile concurrent local account rewriting directory ancestry.
+
+### `GET /api/v1/compositions`
+
+Returns `{items,total}` from the configured data directory, ordered by createdAt then record UUID. A nonexistent directory returns an empty list without creating it. Reads do not mutate records. No deletion endpoint or other application writes exist.
+
+### `GET /api/v1/planets`
+
+`star` is mandatory. Every exact canonical star is supported, not only `~pacfyl`.
+
+Example:
+
+```
+/api/v1/planets?star=~pacfyl&amp;endings=it,yr,oc,ef&amp;minMatches=3&amp;offset=0&amp;limit=50
+```
+
+Optional filters, combined with AND:
+
+- `syllables=rad,bot`: each distinct exact syllable must occur somewhere in the four slots. Comma lists have no spaces or empty elements.
+- `endings=it,yr,oc,ef`: distinct two-letter ending patterns. A pattern matches `syllable.slice(1)`. Duplicate patterns fail; repeated occurrences in a name do not increase the pattern count.
+- `minMatches`: at least this many distinct requested endings. Defaults to all requested endings. If supplied, requires endings and must be in 1..number-of-endings. Thus the three-pattern example is **at least three**, not exactly three (the known pacfyl result is 21 either way).
+- `p0`, `p1`, `p2`, `p3`: one exact syllable per supplied slot, validated against the appropriate prefix/suffix table.
+- `offset`: nonnegative integer, default 0.
+- `limit`: integer 1..100, default 50.
+
+Empty predicates enumerate the catalog. Empty filters supplied as values are invalid. Lists are capped at 16 distinct entries. Unknown endings not represented by a source syllable are invalid. Integer spellings are strict decimal: no signs, whitespace or leading zeros except `0`.
+
+Returns `{star,total,offset,limit,items:[{name,id,syllables,parent}],availabilityChecked:false}`. Numeric point IDs are decimal **strings**. Stable ordering is ascending numeric point ID, not alphabetical. Each catalog exhaustively generates all 65,535 planets and checks canonical roundtrip, class, numeric ID and parentage. An in-memory LRU retains at most two star catalogs per server instance. First lookup is synchronous and can block the local event loop for several seconds; subsequent filters reuse the catalog. No catalog writes occur.
+
+### `GET /api/v1/candidates`
+
+**Matching valid names, not spawn availability.** Drop glyphs into one to four slots, query their base-shape families, and optionally apply a star constraint afterward. Omitting `star` means the **global canonical planet namespace**, never an implicit `~pacfyl` filter. Every returned name is a canonical planet with a validated decode/encode roundtrip and computed original parent. `availabilityChecked` is always `false`; there is no ownership, live sponsorship or availability claim.
+
+Positional predicates are optional. Active slots combine using AND/OR connectors; the optional `star` restricts the **whole** resulting expression:
+
+| Parameter | Meaning/default |
+| --- | --- |
+| `star` | Exact canonical star including `~`; omitted = global. Blank/null-like strings are invalid. |
+| `p0`, `p1`, `p2`, `p3` | Exact syllable at that prefix/suffix/prefix/suffix position. Omitted = no exact predicate. |
+| `shape0`, `shape1`, `shape2`, `shape3` | Exact atlas base-family ID at that slot; selects **all** appropriate prefix/suffix glyphs with that shape, not only the dropped syllable. Omitted = no shape predicate. |
+| `grouping` | Optional exact `rows`; omitted preserves legacy linear semantics. Every other supplied value, including blank or `linear`, is invalid. |
+| `pairPlacement` | Optional `fixed` (default) or `either`, accepted only with explicit `grouping=rows`. Empty, unknown, duplicate values or use without rows return 400. |
+| `join1`, `join2`, `join3` | Exactly lowercase `and` or `or`, default `and`; legacy mode: operator **before active zero-based destination slot N**. Row mode: within first pattern / between patterns / within second pattern. |
+| `offset` | Nonnegative safe integer, default 0. |
+| `limit` | Integer 1..100, default 50. |
+
+**Legacy mode (no `grouping`):** A slot is active only when `pN` or `shapeN` is supplied. Omitted slots contribute **no operand**, not an always-true wildcard operand. Clients must omit empty/disabled boxes and their unused operators; literal blank values remain invalid. A supplied `joinN` requires a predicate-bearing destination N and at least one earlier active slot. Thus `p0=rad&amp;p2=bot&amp;join2=or` means Box 1 prefix `rad` OR Box 3 prefix `bot`, ignoring Box 2. `p2=bot&amp;join2=or`, `p0=rad&amp;join2=and`, `join0`, `join4`, duplicate connectors, uppercase or blank operator values return 400.
+
+**AND binds before OR.** For example `p0=rad&amp;p1=ret&amp;p2=bot&amp;p3=myr&amp;join2=or` means `(p0=rad AND p1=ret) OR (p2=bot AND p3=myr)`. OR is inclusive: a name satisfying both groups appears once. There are no arbitrary parentheses. Default or explicit all-AND queries retain existing behavior. One active slot requires no operator; no predicates and no operators remains unconstrained.
+
+**Opt-in row mode (`grouping=rows`):** combine the top row (slots 0/1) with `join1`, the bottom row (slots 2/3) with `join3`, then combine the two nonempty rows with `join2`: `((A join1 B) join2 (C join3 D))`. Each join defaults to `and`; `or` is inclusive. This is real grouping, not legacy AND-before-OR. For example `grouping=rows&amp;p0=rad&amp;p1=ret&amp;p2=bot&amp;p3=myr&amp;join1=or&amp;join3=or` means `(rad at 0 OR ret at 1) AND (bot at 2 OR myr at 3)`. Removing `grouping=rows` means `rad at 0 OR (ret at 1 AND bot at 2) OR myr at 3`, a different result set.
+
+Omitted leaves are removed, not true OR operands. A one-leaf row is that leaf; an empty row and its middle operator are omitted. Both empty rows are unconstrained. Explicit `join1` requires both slots 0 and 1 active; explicit `join3` requires both slots 2 and 3 active; explicit `join2` requires at least one active leaf in each row. Inapplicable supplied joins return 400 even when `and`. Duplicate/unknown grouping or operators and malformed values also return 400. Thus `grouping=rows&amp;p0=rad&amp;p2=bot&amp;join2=or` is valid, but replacing `join2` with `join1` is invalid. Response schema, canonical exclusion, ordering and pagination do not change; selected star still fences the entire expression.
+
+**Either-half patterns (`grouping=rows&amp;pairPlacement=either`):** inputs 0/1 define pattern 0, inputs 2/3 define pattern 1. A pattern retains its prefix/suffix kinds, exact/shape intersections and internal operator (`join1` or `join3`). Let `M0 = (pattern0 at top OR pattern0 at bottom)` and `M1 = (pattern1 at top OR pattern1 at bottom)`; `join2` combines `M0` and `M1`. An internal AND must be satisfied within one physical half, never by splitting its leaves between top and bottom. Both overlapping patterns may match the **same** half; there is no distinct-placement rule. Empty patterns are absent, not true; a single nonempty pattern searches either half without `join2`, and both empty patterns remain unconstrained. Explicit `pairPlacement=fixed` and omission preserve existing row semantics exactly. Placement is not accepted in legacy mode.
+
+For example, `grouping=rows&amp;pairPlacement=either&amp;p0=rad&amp;p1=dev&amp;p2=bot&amp;p3=myr` returns exactly `~botmyr-raddev` and `~raddev-botmyr`; fixed placement returns only `~raddev-botmyr`. A single `p2=rad&amp;p3=dev` with either placement finds the pair in top or bottom. [Seven actual additive captures](api-examples/either-half-README.md), with an independent [manifest](api-examples/either-half-manifest.json), retain these results, overlapping patterns, selected-star scope, zero-word exclusion and an invalid-placement refusal; historical captures are unchanged.
+
+Fixed row groups compile into at most four monotone DNF masks; either placement uses up to eight occurrence bits and at most sixteen masks. Each pattern's internal join compiles before placement alternatives, then the between-pattern join combines them. The same predicate-bit calculation feeds selected-star filtering and global suffix counting. Collision-free tuple memo keys include position, full truth mask and leading-zero-word state. Only positional single-mask queries use the Cartesian fast path; moving patterns always use bounded suffix counting/unranking.
+
+Supplying both `pN` and `shapeN` intersects **within that slot before Boolean evaluation**. Conflicting exact/family predicates make that operand false; another OR group may still match. An all-AND expression containing such a conflict returns zero, never silently broadens to a wildcard. Blank/invalid values, wrong positional syllables, aliases, unknown/duplicate keys and noncanonical stars return 400. Integers use the same strict decimal spelling as `/planets`. Pagination past the end returns an empty `items` array while preserving `total`.
+
+Response: `{star:null|string,total,offset,limit,items:[{name,id,syllables,parent}],availabilityChecked:false}`. Numeric IDs are decimal strings.
+
+- **Global ordering:** ascending lexical syllable tuple `(p0,p1,p2,p3)`, independent of decoded numeric point IDs. Positional all-AND queries retain the direct Cartesian fast path (at most 65,535 leading pairs). Other queries use exact memoized suffix counts over position, at most 16 fixed-placement or 256 either-placement predicate truth masks, and the leading-zero-word state, then lexical unranking. Neither counting nor high/final pagination scans or allocates the four-billion-name universe or concatenates overlapping rectangles.
+- **Canonical exclusion:** installed `urbit-ob` `co.js` packs syllable pairs as 16-bit words; `ob.js` confines the reversible planet permutation to `[2^16,2^32)`. A leading `doz,zod` word is zero and decodes to a padded shorter identity, so it is excluded. Unconstrained total is **4,294,901,760 = 2^32 − 2^16**. With fixed placement, `p0=doz&amp;p1=zod` therefore returns zero canonical planets, regardless of the last two slots; with either placement, the `doz,zod` pattern can match the bottom half only. Nonzero leading words, including a zero first prefix byte with a nonzero suffix, remain valid; this is not an exclusion of all `doz` prefixes.
+- **Star ordering and scope:** ascending numeric point ID, as in legacy `/planets`. The selected star constrains **all OR branches**, outside the Boolean expression. It is the immutable original spawning-parent relation computed from the identity, not current sponsorship, ownership or live permission/availability to spawn. Filter a verified 65,535-planet catalog; the existing two-entry per-server LRU is shared by both endpoints. A first star lookup can synchronously block the local event loop for several seconds. No catalog or query writes occur. Global and star pages need not share ordering, so reset pagination when changing filters or mode.
+
+Example shape-family search, with two results per page:
+
+```sh
+curl -sS 'http://127.0.0.1:8741/api/v1/candidates?shape0=circle&amp;shape1=circle&amp;shape2=circle&amp;shape3=circle&amp;limit=2'
+```
+
+Actual isolated response:
+
+```json
+{&quot;star&quot;:null,&quot;total&quot;:2432040,&quot;items&quot;:[{&quot;name&quot;:&quot;~barbet-barbet&quot;,&quot;id&quot;:&quot;4226432403&quot;,&quot;syllables&quot;:[&quot;bar&quot;,&quot;bet&quot;,&quot;bar&quot;,&quot;bet&quot;],&quot;parent&quot;:&quot;~dasryn&quot;},{&quot;name&quot;:&quot;~barbet-bardem&quot;,&quot;id&quot;:&quot;1704439484&quot;,&quot;syllables&quot;:[&quot;bar&quot;,&quot;bet&quot;,&quot;bar&quot;,&quot;dem&quot;],&quot;parent&quot;:&quot;~hacbyt&quot;}],&quot;offset&quot;:0,&quot;limit&quot;:2,&quot;availabilityChecked&quot;:false}
+```
+
+Adding `&amp;star=~pacfyl` to the same four-family combination returns total **29**, not a new interpretation of the dropped glyphs. [Actual selected-star response](api-examples/README.md#candidates-shapes-star). Exact `p0=bot&amp;p1=myr&amp;p2=rad&amp;p3=ret` yields one global candidate, one under `~pacfyl`, zero under `~sampel`; all three responses are retained below.
+
+## Complete executable examples and real responses
+
+[The captured examples](api-examples/README.md) include curl commands, actual request JSON, status/content type and full response JSON for **every API**. SVG responses are linked as original-byte files. [The manifest](api-examples/manifest.json) records exact request paths, captured ephemeral origin, response filenames and SHA-256 hashes. These captures used an isolated server and disposable `dataDir`; saved UUIDs and timestamps are **demo records, not the user's saved records**. Curl commands replay against the default `127.0.0.1:8741` origin; every POST explicitly supplies that Origin and JSON Content-Type. The 403 example intentionally adds `Sec-Fetch-Site: cross-site` while preserving those headers.
+
+| API / scenario | Complete request + response |
+| --- | --- |
+| Health | [health](api-examples/README.md#health) |
+| All shapes | [shapes](api-examples/README.md#shapes) |
+| Filtered glyph list (`kind=prefix&amp;q=rad`) | [glyph list](api-examples/README.md#glyph-list-rad) |
+| Specific prefix metadata with embedded original SVGs | [specific glyph](api-examples/README.md#glyph-prefix-rad) |
+| Raw SVG, default and silhouette | [default](api-examples/README.md#glyph-rad-default), [none](api-examples/README.md#glyph-rad-none) |
+| Compose: canonical star, creative free, mismatching star | [star](api-examples/README.md#compose-star), [free](api-examples/README.md#compose-free), [mismatch](api-examples/README.md#compose-mismatch) |
+| Save demo compositions and read them back | [star POST](api-examples/README.md#saved-star), [free POST](api-examples/README.md#saved-free), [GET](api-examples/README.md#saved-list) |
+| Legacy star-only planets | [planets](api-examples/README.md#planets) |
+| Global candidates and next page | [first](api-examples/README.md#candidates-global), [second](api-examples/README.md#candidates-second-page) |
+| Shape-family candidates, optional selected star | [global](api-examples/README.md#candidates-shapes), [star](api-examples/README.md#candidates-shapes-star) |
+| Exact four slots, global versus two different stars | [global](api-examples/README.md#candidates-exact-global), [pacfyl](api-examples/README.md#candidates-exact-pacfyl), [sampel](api-examples/README.md#candidates-exact-sampel) |
+| Mixed global AND/OR, OR under a selected star, dangling-operator 400 | [mixed global](api-examples/README.md#candidates-mixed-global), [OR star](api-examples/README.md#candidates-or-star), [invalid operator](api-examples/README.md#error-dangling-operator) |
+| Opt-in row grouping, legacy comparison, selected star, one leaf and row refusals | [rows](api-examples/README.md#candidates-rows-global), [legacy](api-examples/README.md#candidates-rows-legacy-comparison), [star](api-examples/README.md#candidates-rows-star), [one leaf](api-examples/README.md#candidates-rows-one-leaf), [dangling](api-examples/README.md#error-row-dangling-operator), [grouping](api-examples/README.md#error-grouping) |
+| 400 invalid shape / blank star / query / exact star | [shape](api-examples/README.md#error-candidate), [blank](api-examples/README.md#error-blank-star), [query](api-examples/README.md#error-query), [compose](api-examples/README.md#error-compose) |
+| Specific-glyph errors | [kind 400](api-examples/README.md#error-glyph-kind), [wrong position 404](api-examples/README.md#error-glyph-position), [detail 400](api-examples/README.md#error-glyph-detail) |
+| 409 ineligible save, 403 cross-site marker, 400 legacy missing star | [save](api-examples/README.md#error-save-mismatch), [Origin](api-examples/README.md#error-origin), [planets](api-examples/README.md#error-planets-star-required) |
+
+## Focused verification
+
+Run the retained Python runner with a fresh evidence label (labels cannot overwrite an earlier run):
+
+```
+PYTHONDONTWRITEBYTECODE=1 /usr/bin/python3 -B /Users/tekh/rn/urbit-sigil-atlas/server/test/run-row-group.py local-verification api.test.cjs candidates.test.cjs boolean.test.cjs row-group.test.cjs
+```
+
+With all four basenames it runs `node --test server/test/api.test.cjs server/test/candidates.test.cjs server/test/boolean.test.cjs server/test/row-group.test.cjs`; omitting basenames preserves the earlier API-only default. It retains exact source snapshots, SHA-256 hashes (including installed `urbit-ob` boundary sources, tested original SVG assets, documentation and captured responses), command/cwd, child exit, stdout and stderr under `server/test-evidence/&lt;label&gt;/`. Tests use disposable owned scratch directories and actual loopback requests. No real user's composition data is loaded. Candidate coverage includes the computed global count, second/overlapping/final/high-offset pages, each of the twelve same-family four-slot combinations plus a mixed combination, exact predicates, two independently enumerated star-filter totals, canonical zero-high-word controls, strict input refusals, and byte/hash equality for both glyph details. Earlier missing-route RED receipts are scaffold failures, not proof that later refusal assertions ran; successful complete runs exercise those assertions. Earlier scaffold failures and harness mistakes remain retained; see `server/test-evidence/README.md` for classifications. Frontend/browser integration is verified separately by the parent task.
+
+Boolean tests independently count unions by inclusion/exclusion of Cartesian intersections minus canonical exclusions, check lexical ranks (including high/final and overlapping pages), all eight connector sequences, skipped boxes, conflicting local predicates, unconstrained total, strict dangling/malformed operator refusals, and independently enumerate a selected star through `urbit-ob` to check that every OR branch remains star-constrained. The original API/candidate tests remain unchanged. The initial Boolean RED was the real candidate route returning 400 for a valid OR query, while all 13 original tests passed; added oracle/edge coverage is subsequent regression coverage, not separately claimed RED.
+
+To intentionally refresh isolated demo captures (replaces only files under `docs/api-examples/`, and saves only to a fresh disposable scratch directory):
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 /usr/bin/python3 -B /Users/tekh/rn/urbit-sigil-atlas/server/test/run-row-group.py isolated-examples-refresh examples.cjs
+```
+
+The capture reads back both demo records before cleanup, verifies response hashes after writing, and shuts down only its own ephemeral server. It never restarts the running workshop or writes project `var/`.
+
+Row-mode qualification and exact evidence paths are described in [row-group-backend.md](row-group-backend.md). That historical row seal and the earlier 18-test/33-capture Boolean seal are predecessor evidence. Current either-half qualification is [either-half-backend.md](either-half-backend.md): one retained behavioral tracer RED/GREEN, one 28-test qualified regression run (including all four unchanged prior suites), and seven additive real captures. Original API, candidate, Boolean and row-group test bytes and historical receipts/seals remain unchanged.
+</pre></details><h2>Captured request / response examples</h2><details class="api-example" id="example-health"><summary>GET /api/v1/health · health</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/health'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;ok&quot;: true,
+  &quot;localOnly&quot;: true,
+  &quot;authority&quot;: false
+}</pre><a href="reference/examples/health.json">Open exact captured response</a></details><details class="api-example" id="example-shapes"><summary>GET /api/v1/shapes · shapes</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/shapes'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;items&quot;: [
+    {
+      &quot;id&quot;: &quot;circle&quot;,
+      &quot;label&quot;: &quot;circle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;square&quot;,
+      &quot;label&quot;: &quot;square&quot;
+    },
+    {
+      &quot;id&quot;: &quot;leaf-down&quot;,
+      &quot;label&quot;: &quot;leaf down&quot;
+    },
+    {
+      &quot;id&quot;: &quot;leaf-up&quot;,
+      &quot;label&quot;: &quot;leaf up&quot;
+    },
+    {
+      &quot;id&quot;: &quot;q-tl&quot;,
+      &quot;label&quot;: &quot;q tl&quot;
+    },
+    {
+      &quot;id&quot;: &quot;q-tr&quot;,
+      &quot;label&quot;: &quot;q tr&quot;
+    },
+    {
+      &quot;id&quot;: &quot;q-bl&quot;,
+      &quot;label&quot;: &quot;q bl&quot;
+    },
+    {
+      &quot;id&quot;: &quot;q-br&quot;,
+      &quot;label&quot;: &quot;q br&quot;
+    },
+    {
+      &quot;id&quot;: &quot;d-left&quot;,
+      &quot;label&quot;: &quot;d left&quot;
+    },
+    {
+      &quot;id&quot;: &quot;d-top&quot;,
+      &quot;label&quot;: &quot;d top&quot;
+    },
+    {
+      &quot;id&quot;: &quot;d-right&quot;,
+      &quot;label&quot;: &quot;d right&quot;
+    },
+    {
+      &quot;id&quot;: &quot;d-bottom&quot;,
+      &quot;label&quot;: &quot;d bottom&quot;
+    }
+  ]
+}</pre><a href="reference/examples/shapes.json">Open exact captured response</a></details><details class="api-example" id="example-glyph-list-rad"><summary>GET /api/v1/glyphs?kind=prefix&amp;q=rad · glyph-list-rad</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/glyphs?kind=prefix&amp;q=rad'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;items&quot;: [
+    {
+      &quot;kind&quot;: &quot;prefix&quot;,
+      &quot;syllable&quot;: &quot;rad&quot;,
+      &quot;shape&quot;: &quot;q-bl&quot;
+    }
+  ],
+  &quot;total&quot;: 1
+}</pre><a href="reference/examples/glyph-list-rad.json">Open exact captured response</a></details><details class="api-example" id="example-glyph-prefix-rad"><summary>GET /api/v1/glyphs/prefix/rad · glyph-prefix-rad</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/glyphs/prefix/rad'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;kind&quot;: &quot;prefix&quot;,
+  &quot;syllable&quot;: &quot;rad&quot;,
+  &quot;shape&quot;: &quot;q-bl&quot;,
+  &quot;assets&quot;: {
+    &quot;full&quot;: &quot;/assets/glyphs/prefix-rad-default.svg&quot;,
+    &quot;silhouette&quot;: &quot;/assets/glyphs/prefix-rad-none.svg&quot;
+  },
+  &quot;svg&quot;: {
+    &quot;full&quot;: &quot;&lt;svg xmlns=\&quot;http://www.w3.org/2000/svg\&quot; width=\&quot;64\&quot; height=\&quot;64\&quot; viewBox=\&quot;0 0 64 64\&quot;&gt;&lt;rect width=\&quot;64\&quot; height=\&quot;64\&quot; fill=\&quot;#ffffff\&quot;/&gt;&lt;g transform='scale(0.5)'&gt;&lt;path d='M128 128C128 57.3076 70.6925 6.18013e-06 1.11901e-05 0L0 128L128 128Z' fill='#181820' stroke='#ffffff' stroke-width='4'/&gt;&lt;circle cx='32' cy='96' r='11.5' fill='#181820' stroke='#181820' stroke-width='4'/&gt;&lt;circle cx='32' cy='96' r='9' fill='#ffffff' stroke='#ffffff' stroke-width='4'/&gt;&lt;/g&gt;&lt;/svg&gt;&quot;,
+    &quot;silhouette&quot;: &quot;&lt;svg xmlns=\&quot;http://www.w3.org/2000/svg\&quot; width=\&quot;64\&quot; height=\&quot;64\&quot; viewBox=\&quot;0 0 64 64\&quot;&gt;&lt;rect width=\&quot;64\&quot; height=\&quot;64\&quot; fill=\&quot;#ffffff\&quot;/&gt;&lt;g transform='scale(0.5)'&gt;&lt;path d='M128 128C128 57.3076 70.6925 6.18013e-06 1.11901e-05 0L0 128L128 128Z' fill='#181820' stroke='#ffffff' stroke-width='4'/&gt;&lt;/g&gt;&lt;/svg&gt;&quot;
+  }
+}</pre><a href="reference/examples/glyph-prefix-rad.json">Open exact captured response</a></details><details class="api-example" id="example-glyph-rad-default"><summary>GET /api/v1/glyphs/prefix/rad/svg · glyph-rad-default</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/glyphs/prefix/rad/svg'</pre><h3>Captured response</h3><p>HTTP 200 · image/svg+xml; charset=utf-8</p><img src="reference/examples/glyph-rad-default.svg" width="128" height="128" alt="Captured original glyph response"><pre>&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;64&quot; height=&quot;64&quot; viewBox=&quot;0 0 64 64&quot;&gt;&lt;rect width=&quot;64&quot; height=&quot;64&quot; fill=&quot;#ffffff&quot;/&gt;&lt;g transform='scale(0.5)'&gt;&lt;path d='M128 128C128 57.3076 70.6925 6.18013e-06 1.11901e-05 0L0 128L128 128Z' fill='#181820' stroke='#ffffff' stroke-width='4'/&gt;&lt;circle cx='32' cy='96' r='11.5' fill='#181820' stroke='#181820' stroke-width='4'/&gt;&lt;circle cx='32' cy='96' r='9' fill='#ffffff' stroke='#ffffff' stroke-width='4'/&gt;&lt;/g&gt;&lt;/svg&gt;</pre><a href="reference/examples/glyph-rad-default.svg">Open exact captured response</a></details><details class="api-example" id="example-glyph-rad-none"><summary>GET /api/v1/glyphs/prefix/rad/svg?detail=none · glyph-rad-none</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/glyphs/prefix/rad/svg?detail=none'</pre><h3>Captured response</h3><p>HTTP 200 · image/svg+xml; charset=utf-8</p><img src="reference/examples/glyph-rad-none.svg" width="128" height="128" alt="Captured original glyph response"><pre>&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;64&quot; height=&quot;64&quot; viewBox=&quot;0 0 64 64&quot;&gt;&lt;rect width=&quot;64&quot; height=&quot;64&quot; fill=&quot;#ffffff&quot;/&gt;&lt;g transform='scale(0.5)'&gt;&lt;path d='M128 128C128 57.3076 70.6925 6.18013e-06 1.11901e-05 0L0 128L128 128Z' fill='#181820' stroke='#ffffff' stroke-width='4'/&gt;&lt;/g&gt;&lt;/svg&gt;</pre><a href="reference/examples/glyph-rad-none.svg">Open exact captured response</a></details><details class="api-example" id="example-compose-star"><summary>POST /api/v1/compose · compose-star</summary><h3>Request</h3><pre>curl -sS -X POST -H 'Origin: http://127.0.0.1:8741' -H 'Content-Type: application/json' --data '{&quot;syllables&quot;:[&quot;bot&quot;,&quot;myr&quot;,&quot;rad&quot;,&quot;ret&quot;],&quot;mode&quot;:&quot;star&quot;,&quot;star&quot;:&quot;~pacfyl&quot;}' 'http://127.0.0.1:8741/api/v1/compose'</pre><h3>JSON request body</h3><pre>{
+  &quot;syllables&quot;: [
+    &quot;bot&quot;,
+    &quot;myr&quot;,
+    &quot;rad&quot;,
+    &quot;ret&quot;
+  ],
+  &quot;mode&quot;: &quot;star&quot;,
+  &quot;star&quot;: &quot;~pacfyl&quot;
+}</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;name&quot;: &quot;~botmyr-radret&quot;,
+  &quot;id&quot;: &quot;1082103209&quot;,
+  &quot;kind&quot;: &quot;planet&quot;,
+  &quot;canonical&quot;: true,
+  &quot;parent&quot;: &quot;~pacfyl&quot;,
+  &quot;mode&quot;: &quot;star&quot;,
+  &quot;star&quot;: &quot;~pacfyl&quot;,
+  &quot;eligible&quot;: true,
+  &quot;syllables&quot;: [
+    &quot;bot&quot;,
+    &quot;myr&quot;,
+    &quot;rad&quot;,
+    &quot;ret&quot;
+  ]
+}</pre><a href="reference/examples/compose-star.json">Open exact captured response</a></details><details class="api-example" id="example-compose-free"><summary>POST /api/v1/compose · compose-free</summary><h3>Request</h3><pre>curl -sS -X POST -H 'Origin: http://127.0.0.1:8741' -H 'Content-Type: application/json' --data '{&quot;syllables&quot;:[&quot;doz&quot;,&quot;zod&quot;,&quot;doz&quot;,&quot;zod&quot;],&quot;mode&quot;:&quot;free&quot;}' 'http://127.0.0.1:8741/api/v1/compose'</pre><h3>JSON request body</h3><pre>{
+  &quot;syllables&quot;: [
+    &quot;doz&quot;,
+    &quot;zod&quot;,
+    &quot;doz&quot;,
+    &quot;zod&quot;
+  ],
+  &quot;mode&quot;: &quot;free&quot;
+}</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;name&quot;: &quot;~dozzod-dozzod&quot;,
+  &quot;id&quot;: null,
+  &quot;kind&quot;: null,
+  &quot;canonical&quot;: false,
+  &quot;parent&quot;: null,
+  &quot;mode&quot;: &quot;free&quot;,
+  &quot;star&quot;: null,
+  &quot;eligible&quot;: true,
+  &quot;syllables&quot;: [
+    &quot;doz&quot;,
+    &quot;zod&quot;,
+    &quot;doz&quot;,
+    &quot;zod&quot;
+  ]
+}</pre><a href="reference/examples/compose-free.json">Open exact captured response</a></details><details class="api-example" id="example-compose-mismatch"><summary>POST /api/v1/compose · compose-mismatch</summary><h3>Request</h3><pre>curl -sS -X POST -H 'Origin: http://127.0.0.1:8741' -H 'Content-Type: application/json' --data '{&quot;syllables&quot;:[&quot;bot&quot;,&quot;myr&quot;,&quot;rad&quot;,&quot;ret&quot;],&quot;mode&quot;:&quot;star&quot;,&quot;star&quot;:&quot;~sampel&quot;}' 'http://127.0.0.1:8741/api/v1/compose'</pre><h3>JSON request body</h3><pre>{
+  &quot;syllables&quot;: [
+    &quot;bot&quot;,
+    &quot;myr&quot;,
+    &quot;rad&quot;,
+    &quot;ret&quot;
+  ],
+  &quot;mode&quot;: &quot;star&quot;,
+  &quot;star&quot;: &quot;~sampel&quot;
+}</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;name&quot;: &quot;~botmyr-radret&quot;,
+  &quot;id&quot;: &quot;1082103209&quot;,
+  &quot;kind&quot;: &quot;planet&quot;,
+  &quot;canonical&quot;: true,
+  &quot;parent&quot;: &quot;~pacfyl&quot;,
+  &quot;mode&quot;: &quot;star&quot;,
+  &quot;star&quot;: &quot;~sampel&quot;,
+  &quot;eligible&quot;: false,
+  &quot;syllables&quot;: [
+    &quot;bot&quot;,
+    &quot;myr&quot;,
+    &quot;rad&quot;,
+    &quot;ret&quot;
+  ]
+}</pre><a href="reference/examples/compose-mismatch.json">Open exact captured response</a></details><details class="api-example" id="example-saved-star"><summary>POST /api/v1/compositions · saved-star</summary><h3>Request</h3><pre>curl -sS -X POST -H 'Origin: http://127.0.0.1:8741' -H 'Content-Type: application/json' --data '{&quot;syllables&quot;:[&quot;bot&quot;,&quot;myr&quot;,&quot;rad&quot;,&quot;ret&quot;],&quot;mode&quot;:&quot;star&quot;,&quot;star&quot;:&quot;~pacfyl&quot;,&quot;label&quot;:&quot;Isolated documentation demo&quot;}' 'http://127.0.0.1:8741/api/v1/compositions'</pre><h3>JSON request body</h3><pre>{
+  &quot;syllables&quot;: [
+    &quot;bot&quot;,
+    &quot;myr&quot;,
+    &quot;rad&quot;,
+    &quot;ret&quot;
+  ],
+  &quot;mode&quot;: &quot;star&quot;,
+  &quot;star&quot;: &quot;~pacfyl&quot;,
+  &quot;label&quot;: &quot;Isolated documentation demo&quot;
+}</pre><h3>Captured response</h3><p>HTTP 201 · application/json; charset=utf-8</p><pre>{
+  &quot;item&quot;: {
+    &quot;name&quot;: &quot;~botmyr-radret&quot;,
+    &quot;id&quot;: &quot;f3eec134-0ecb-4d09-9dd7-85895210b7dc&quot;,
+    &quot;kind&quot;: &quot;planet&quot;,
+    &quot;canonical&quot;: true,
+    &quot;parent&quot;: &quot;~pacfyl&quot;,
+    &quot;mode&quot;: &quot;star&quot;,
+    &quot;star&quot;: &quot;~pacfyl&quot;,
+    &quot;eligible&quot;: true,
+    &quot;syllables&quot;: [
+      &quot;bot&quot;,
+      &quot;myr&quot;,
+      &quot;rad&quot;,
+      &quot;ret&quot;
+    ],
+    &quot;label&quot;: &quot;Isolated documentation demo&quot;,
+    &quot;createdAt&quot;: &quot;2026-11-09T23:30:42.647Z&quot;
+  }
+}</pre><a href="reference/examples/saved-star.json">Open exact captured response</a></details><details class="api-example" id="example-saved-free"><summary>POST /api/v1/compositions · saved-free</summary><h3>Request</h3><pre>curl -sS -X POST -H 'Origin: http://127.0.0.1:8741' -H 'Content-Type: application/json' --data '{&quot;syllables&quot;:[&quot;doz&quot;,&quot;zod&quot;,&quot;doz&quot;,&quot;zod&quot;],&quot;mode&quot;:&quot;free&quot;,&quot;label&quot;:&quot;Isolated creative demo&quot;}' 'http://127.0.0.1:8741/api/v1/compositions'</pre><h3>JSON request body</h3><pre>{
+  &quot;syllables&quot;: [
+    &quot;doz&quot;,
+    &quot;zod&quot;,
+    &quot;doz&quot;,
+    &quot;zod&quot;
+  ],
+  &quot;mode&quot;: &quot;free&quot;,
+  &quot;label&quot;: &quot;Isolated creative demo&quot;
+}</pre><h3>Captured response</h3><p>HTTP 201 · application/json; charset=utf-8</p><pre>{
+  &quot;item&quot;: {
+    &quot;name&quot;: &quot;~dozzod-dozzod&quot;,
+    &quot;id&quot;: &quot;43296a2c-f792-4e9a-8ad0-b8e1c08c567d&quot;,
+    &quot;kind&quot;: null,
+    &quot;canonical&quot;: false,
+    &quot;parent&quot;: null,
+    &quot;mode&quot;: &quot;free&quot;,
+    &quot;star&quot;: null,
+    &quot;eligible&quot;: true,
+    &quot;syllables&quot;: [
+      &quot;doz&quot;,
+      &quot;zod&quot;,
+      &quot;doz&quot;,
+      &quot;zod&quot;
+    ],
+    &quot;label&quot;: &quot;Isolated creative demo&quot;,
+    &quot;createdAt&quot;: &quot;2026-11-09T23:30:42.664Z&quot;
+  }
+}</pre><a href="reference/examples/saved-free.json">Open exact captured response</a></details><details class="api-example" id="example-saved-list"><summary>GET /api/v1/compositions · saved-list</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/compositions'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~botmyr-radret&quot;,
+      &quot;id&quot;: &quot;f3eec134-0ecb-4d09-9dd7-85895210b7dc&quot;,
+      &quot;kind&quot;: &quot;planet&quot;,
+      &quot;canonical&quot;: true,
+      &quot;parent&quot;: &quot;~pacfyl&quot;,
+      &quot;mode&quot;: &quot;star&quot;,
+      &quot;star&quot;: &quot;~pacfyl&quot;,
+      &quot;eligible&quot;: true,
+      &quot;syllables&quot;: [
+        &quot;bot&quot;,
+        &quot;myr&quot;,
+        &quot;rad&quot;,
+        &quot;ret&quot;
+      ],
+      &quot;label&quot;: &quot;Isolated documentation demo&quot;,
+      &quot;createdAt&quot;: &quot;2026-11-09T23:30:42.647Z&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~dozzod-dozzod&quot;,
+      &quot;id&quot;: &quot;43296a2c-f792-4e9a-8ad0-b8e1c08c567d&quot;,
+      &quot;kind&quot;: null,
+      &quot;canonical&quot;: false,
+      &quot;parent&quot;: null,
+      &quot;mode&quot;: &quot;free&quot;,
+      &quot;star&quot;: null,
+      &quot;eligible&quot;: true,
+      &quot;syllables&quot;: [
+        &quot;doz&quot;,
+        &quot;zod&quot;,
+        &quot;doz&quot;,
+        &quot;zod&quot;
+      ],
+      &quot;label&quot;: &quot;Isolated creative demo&quot;,
+      &quot;createdAt&quot;: &quot;2026-11-09T23:30:42.664Z&quot;
+    }
+  ],
+  &quot;total&quot;: 2
+}</pre><a href="reference/examples/saved-list.json">Open exact captured response</a></details><details class="api-example" id="example-planets"><summary>GET /api/v1/planets?star=~pacfyl&amp;p0=bot&amp;p1=myr&amp;p2=rad&amp;p3=ret&amp;limit=2 · planets</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/planets?star=~pacfyl&amp;p0=bot&amp;p1=myr&amp;p2=rad&amp;p3=ret&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: &quot;~pacfyl&quot;,
+  &quot;total&quot;: 1,
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~botmyr-radret&quot;,
+      &quot;id&quot;: &quot;1082103209&quot;,
+      &quot;syllables&quot;: [
+        &quot;bot&quot;,
+        &quot;myr&quot;,
+        &quot;rad&quot;,
+        &quot;ret&quot;
+      ],
+      &quot;parent&quot;: &quot;~pacfyl&quot;
+    }
+  ],
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/planets.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-global"><summary>GET /api/v1/candidates?limit=2 · candidates-global</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 4294901760,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~bacbec-bacbec&quot;,
+      &quot;id&quot;: &quot;2188024574&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bec&quot;,
+        &quot;bac&quot;,
+        &quot;bec&quot;
+      ],
+      &quot;parent&quot;: &quot;~tilnev&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~bacbec-bacbel&quot;,
+      &quot;id&quot;: &quot;1696052275&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bec&quot;,
+        &quot;bac&quot;,
+        &quot;bel&quot;
+      ],
+      &quot;parent&quot;: &quot;~hosmev&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-global.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-second-page"><summary>GET /api/v1/candidates?offset=2&amp;limit=2 · candidates-second-page</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?offset=2&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 4294901760,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~bacbec-bacben&quot;,
+      &quot;id&quot;: &quot;366089125&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bec&quot;,
+        &quot;bac&quot;,
+        &quot;ben&quot;
+      ],
+      &quot;parent&quot;: &quot;~modmex&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~bacbec-bacbep&quot;,
+      &quot;id&quot;: &quot;3730265448&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bec&quot;,
+        &quot;bac&quot;,
+        &quot;bep&quot;
+      ],
+      &quot;parent&quot;: &quot;~savmes&quot;
+    }
+  ],
+  &quot;offset&quot;: 2,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-second-page.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-shapes"><summary>GET /api/v1/candidates?shape0=circle&amp;shape1=circle&amp;shape2=circle&amp;shape3=circle&amp;limit=2 · candidates-shapes</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?shape0=circle&amp;shape1=circle&amp;shape2=circle&amp;shape3=circle&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 2432040,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~barbet-barbet&quot;,
+      &quot;id&quot;: &quot;4226432403&quot;,
+      &quot;syllables&quot;: [
+        &quot;bar&quot;,
+        &quot;bet&quot;,
+        &quot;bar&quot;,
+        &quot;bet&quot;
+      ],
+      &quot;parent&quot;: &quot;~dasryn&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~barbet-bardem&quot;,
+      &quot;id&quot;: &quot;1704439484&quot;,
+      &quot;syllables&quot;: [
+        &quot;bar&quot;,
+        &quot;bet&quot;,
+        &quot;bar&quot;,
+        &quot;dem&quot;
+      ],
+      &quot;parent&quot;: &quot;~hacbyt&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-shapes.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-shapes-star"><summary>GET /api/v1/candidates?shape0=circle&amp;shape1=circle&amp;shape2=circle&amp;shape3=circle&amp;star=~pacfyl&amp;limit=2 · candidates-shapes-star</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?shape0=circle&amp;shape1=circle&amp;shape2=circle&amp;shape3=circle&amp;star=~pacfyl&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: &quot;~pacfyl&quot;,
+  &quot;total&quot;: 29,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~rolfet-liblet&quot;,
+      &quot;id&quot;: &quot;41653673&quot;,
+      &quot;syllables&quot;: [
+        &quot;rol&quot;,
+        &quot;fet&quot;,
+        &quot;lib&quot;,
+        &quot;let&quot;
+      ],
+      &quot;parent&quot;: &quot;~pacfyl&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~ligped-dolbet&quot;,
+      &quot;id&quot;: &quot;190354857&quot;,
+      &quot;syllables&quot;: [
+        &quot;lig&quot;,
+        &quot;ped&quot;,
+        &quot;dol&quot;,
+        &quot;bet&quot;
+      ],
+      &quot;parent&quot;: &quot;~pacfyl&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-shapes-star.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-exact-global"><summary>GET /api/v1/candidates?p0=bot&amp;p1=myr&amp;p2=rad&amp;p3=ret · candidates-exact-global</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?p0=bot&amp;p1=myr&amp;p2=rad&amp;p3=ret'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 1,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~botmyr-radret&quot;,
+      &quot;id&quot;: &quot;1082103209&quot;,
+      &quot;syllables&quot;: [
+        &quot;bot&quot;,
+        &quot;myr&quot;,
+        &quot;rad&quot;,
+        &quot;ret&quot;
+      ],
+      &quot;parent&quot;: &quot;~pacfyl&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 50,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-exact-global.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-exact-pacfyl"><summary>GET /api/v1/candidates?p0=bot&amp;p1=myr&amp;p2=rad&amp;p3=ret&amp;star=~pacfyl · candidates-exact-pacfyl</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?p0=bot&amp;p1=myr&amp;p2=rad&amp;p3=ret&amp;star=~pacfyl'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: &quot;~pacfyl&quot;,
+  &quot;total&quot;: 1,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~botmyr-radret&quot;,
+      &quot;id&quot;: &quot;1082103209&quot;,
+      &quot;syllables&quot;: [
+        &quot;bot&quot;,
+        &quot;myr&quot;,
+        &quot;rad&quot;,
+        &quot;ret&quot;
+      ],
+      &quot;parent&quot;: &quot;~pacfyl&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 50,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-exact-pacfyl.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-exact-sampel"><summary>GET /api/v1/candidates?p0=bot&amp;p1=myr&amp;p2=rad&amp;p3=ret&amp;star=~sampel · candidates-exact-sampel</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?p0=bot&amp;p1=myr&amp;p2=rad&amp;p3=ret&amp;star=~sampel'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: &quot;~sampel&quot;,
+  &quot;total&quot;: 0,
+  &quot;items&quot;: [],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 50,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-exact-sampel.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-mixed-global"><summary>GET /api/v1/candidates?p0=rad&amp;p1=ret&amp;p2=bot&amp;p3=myr&amp;join2=or&amp;limit=2 · candidates-mixed-global</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?p0=rad&amp;p1=ret&amp;p2=bot&amp;p3=myr&amp;join2=or&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 131070,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~bacbec-botmyr&quot;,
+      &quot;id&quot;: &quot;2941893541&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bec&quot;,
+        &quot;bot&quot;,
+        &quot;myr&quot;
+      ],
+      &quot;parent&quot;: &quot;~dosmex&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~bacbel-botmyr&quot;,
+      &quot;id&quot;: &quot;3768380423&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bel&quot;,
+        &quot;bot&quot;,
+        &quot;myr&quot;
+      ],
+      &quot;parent&quot;: &quot;~dovlet&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-mixed-global.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-or-star"><summary>GET /api/v1/candidates?p0=bot&amp;p2=rad&amp;join2=or&amp;star=~pacfyl&amp;limit=2 · candidates-or-star</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?p0=bot&amp;p2=rad&amp;join2=or&amp;star=~pacfyl&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: &quot;~pacfyl&quot;,
+  &quot;total&quot;: 536,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~botfyl-pinful&quot;,
+      &quot;id&quot;: &quot;16487849&quot;,
+      &quot;syllables&quot;: [
+        &quot;bot&quot;,
+        &quot;fyl&quot;,
+        &quot;pin&quot;,
+        &quot;ful&quot;
+      ],
+      &quot;parent&quot;: &quot;~pacfyl&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~tipwes-raddeb&quot;,
+      &quot;id&quot;: &quot;29922729&quot;,
+      &quot;syllables&quot;: [
+        &quot;tip&quot;,
+        &quot;wes&quot;,
+        &quot;rad&quot;,
+        &quot;deb&quot;
+      ],
+      &quot;parent&quot;: &quot;~pacfyl&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-or-star.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-rows-global"><summary>GET /api/v1/candidates?grouping=rows&amp;p0=rad&amp;p1=ret&amp;p2=bot&amp;p3=myr&amp;join1=or&amp;join2=and&amp;join3=or&amp;limit=2 · candidates-rows-global</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&amp;p0=rad&amp;p1=ret&amp;p2=bot&amp;p3=myr&amp;join1=or&amp;join2=and&amp;join3=or&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 261121,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~bacret-bacmyr&quot;,
+      &quot;id&quot;: &quot;3893067901&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;ret&quot;,
+        &quot;bac&quot;,
+        &quot;myr&quot;
+      ],
+      &quot;parent&quot;: &quot;~laswyt&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~bacret-balmyr&quot;,
+      &quot;id&quot;: &quot;3055648563&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;ret&quot;,
+        &quot;bal&quot;,
+        &quot;myr&quot;
+      ],
+      &quot;parent&quot;: &quot;~palmev&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-rows-global.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-rows-legacy-comparison"><summary>GET /api/v1/candidates?p0=rad&amp;p1=ret&amp;p2=bot&amp;p3=myr&amp;join1=or&amp;join2=and&amp;join3=or&amp;limit=2 · candidates-rows-legacy-comparison</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?p0=rad&amp;p1=ret&amp;p2=bot&amp;p3=myr&amp;join1=or&amp;join2=and&amp;join3=or&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 33553665,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~bacbec-bacmyr&quot;,
+      &quot;id&quot;: &quot;2154343085&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bec&quot;,
+        &quot;bac&quot;,
+        &quot;myr&quot;
+      ],
+      &quot;parent&quot;: &quot;~hasmug&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~bacbec-balmyr&quot;,
+      &quot;id&quot;: &quot;4124997344&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bec&quot;,
+        &quot;bal&quot;,
+        &quot;myr&quot;
+      ],
+      &quot;parent&quot;: &quot;~tanrem&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-rows-legacy-comparison.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-rows-star"><summary>GET /api/v1/candidates?grouping=rows&amp;shape0=circle&amp;shape1=square&amp;shape2=circle&amp;shape3=leaf-up&amp;join1=or&amp;join3=or&amp;star=~pacfyl&amp;limit=2 · candidates-rows-star</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&amp;shape0=circle&amp;shape1=square&amp;shape2=circle&amp;shape3=leaf-up&amp;join1=or&amp;join3=or&amp;star=~pacfyl&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: &quot;~pacfyl&quot;,
+  &quot;total&quot;: 3958,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~molser-dorbel&quot;,
+      &quot;id&quot;: &quot;562601&quot;,
+      &quot;syllables&quot;: [
+        &quot;mol&quot;,
+        &quot;ser&quot;,
+        &quot;dor&quot;,
+        &quot;bel&quot;
+      ],
+      &quot;parent&quot;: &quot;~pacfyl&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~folren-dibben&quot;,
+      &quot;id&quot;: &quot;3904937&quot;,
+      &quot;syllables&quot;: [
+        &quot;fol&quot;,
+        &quot;ren&quot;,
+        &quot;dib&quot;,
+        &quot;ben&quot;
+      ],
+      &quot;parent&quot;: &quot;~pacfyl&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-rows-star.json">Open exact captured response</a></details><details class="api-example" id="example-candidates-rows-one-leaf"><summary>GET /api/v1/candidates?grouping=rows&amp;p1=ret&amp;limit=2 · candidates-rows-one-leaf</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&amp;p1=ret&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 16777216,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~bacret-bacbec&quot;,
+      &quot;id&quot;: &quot;3235854145&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;ret&quot;,
+        &quot;bac&quot;,
+        &quot;bec&quot;
+      ],
+      &quot;parent&quot;: &quot;~tadreb&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~bacret-bacbel&quot;,
+      &quot;id&quot;: &quot;3112638626&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;ret&quot;,
+        &quot;bac&quot;,
+        &quot;bel&quot;
+      ],
+      &quot;parent&quot;: &quot;~dornus&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/candidates-rows-one-leaf.json">Open exact captured response</a></details><details class="api-example" id="example-error-row-dangling-operator"><summary>GET /api/v1/candidates?grouping=rows&amp;p0=rad&amp;p2=bot&amp;join1=or · error-row-dangling-operator</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&amp;p0=rad&amp;p2=bot&amp;join1=or'</pre><h3>Captured response</h3><p>HTTP 400 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+    &quot;message&quot;: &quot;Invalid or dangling row operator&quot;
+  }
+}</pre><a href="reference/examples/error-row-dangling-operator.json">Open exact captured response</a></details><details class="api-example" id="example-error-grouping"><summary>GET /api/v1/candidates?grouping=linear · error-grouping</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=linear'</pre><h3>Captured response</h3><p>HTTP 400 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+    &quot;message&quot;: &quot;Invalid grouping&quot;
+  }
+}</pre><a href="reference/examples/error-grouping.json">Open exact captured response</a></details><details class="api-example" id="example-error-dangling-operator"><summary>GET /api/v1/candidates?p0=rad&amp;join2=or · error-dangling-operator</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?p0=rad&amp;join2=or'</pre><h3>Captured response</h3><p>HTTP 400 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+    &quot;message&quot;: &quot;Invalid or dangling positional operator&quot;
+  }
+}</pre><a href="reference/examples/error-dangling-operator.json">Open exact captured response</a></details><details class="api-example" id="example-error-candidate"><summary>GET /api/v1/candidates?shape0=CIRCLE · error-candidate</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?shape0=CIRCLE'</pre><h3>Captured response</h3><p>HTTP 400 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+    &quot;message&quot;: &quot;Unknown shape&quot;
+  }
+}</pre><a href="reference/examples/error-candidate.json">Open exact captured response</a></details><details class="api-example" id="example-error-blank-star"><summary>GET /api/v1/candidates?star= · error-blank-star</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?star='</pre><h3>Captured response</h3><p>HTTP 400 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+    &quot;message&quot;: &quot;star must be an exact canonical star&quot;
+  }
+}</pre><a href="reference/examples/error-blank-star.json">Open exact captured response</a></details><details class="api-example" id="example-error-glyph-kind"><summary>GET /api/v1/glyphs/PREFIX/rad · error-glyph-kind</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/glyphs/PREFIX/rad'</pre><h3>Captured response</h3><p>HTTP 400 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+    &quot;message&quot;: &quot;Unknown glyph kind&quot;
+  }
+}</pre><a href="reference/examples/error-glyph-kind.json">Open exact captured response</a></details><details class="api-example" id="example-error-glyph-position"><summary>GET /api/v1/glyphs/suffix/rad · error-glyph-position</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/glyphs/suffix/rad'</pre><h3>Captured response</h3><p>HTTP 404 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;NOT_FOUND&quot;,
+    &quot;message&quot;: &quot;Glyph not found&quot;
+  }
+}</pre><a href="reference/examples/error-glyph-position.json">Open exact captured response</a></details><details class="api-example" id="example-error-glyph-detail"><summary>GET /api/v1/glyphs/prefix/rad/svg?detail=unknown · error-glyph-detail</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/glyphs/prefix/rad/svg?detail=unknown'</pre><h3>Captured response</h3><p>HTTP 400 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+    &quot;message&quot;: &quot;detail must be default or none&quot;
+  }
+}</pre><a href="reference/examples/error-glyph-detail.json">Open exact captured response</a></details><details class="api-example" id="example-error-compose"><summary>POST /api/v1/compose · error-compose</summary><h3>Request</h3><pre>curl -sS -X POST -H 'Origin: http://127.0.0.1:8741' -H 'Content-Type: application/json' --data '{&quot;syllables&quot;:[&quot;bot&quot;,&quot;myr&quot;,&quot;rad&quot;,&quot;ret&quot;],&quot;mode&quot;:&quot;star&quot;,&quot;star&quot;:&quot;pacfyl&quot;}' 'http://127.0.0.1:8741/api/v1/compose'</pre><h3>JSON request body</h3><pre>{
+  &quot;syllables&quot;: [
+    &quot;bot&quot;,
+    &quot;myr&quot;,
+    &quot;rad&quot;,
+    &quot;ret&quot;
+  ],
+  &quot;mode&quot;: &quot;star&quot;,
+  &quot;star&quot;: &quot;pacfyl&quot;
+}</pre><h3>Captured response</h3><p>HTTP 400 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+    &quot;message&quot;: &quot;star must be an exact canonical star&quot;
+  }
+}</pre><a href="reference/examples/error-compose.json">Open exact captured response</a></details><details class="api-example" id="example-error-save-mismatch"><summary>POST /api/v1/compositions · error-save-mismatch</summary><h3>Request</h3><pre>curl -sS -X POST -H 'Origin: http://127.0.0.1:8741' -H 'Content-Type: application/json' --data '{&quot;syllables&quot;:[&quot;bot&quot;,&quot;myr&quot;,&quot;rad&quot;,&quot;ret&quot;],&quot;mode&quot;:&quot;star&quot;,&quot;star&quot;:&quot;~sampel&quot;}' 'http://127.0.0.1:8741/api/v1/compositions'</pre><h3>JSON request body</h3><pre>{
+  &quot;syllables&quot;: [
+    &quot;bot&quot;,
+    &quot;myr&quot;,
+    &quot;rad&quot;,
+    &quot;ret&quot;
+  ],
+  &quot;mode&quot;: &quot;star&quot;,
+  &quot;star&quot;: &quot;~sampel&quot;
+}</pre><h3>Captured response</h3><p>HTTP 409 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INELIGIBLE_COMPOSITION&quot;,
+    &quot;message&quot;: &quot;Composition is not a canonical planet of this star&quot;
+  }
+}</pre><a href="reference/examples/error-save-mismatch.json">Open exact captured response</a></details><details class="api-example" id="example-error-origin"><summary>POST /api/v1/compose · error-origin</summary><h3>Request</h3><pre>curl -sS -X POST -H 'Origin: http://127.0.0.1:8741' -H 'Sec-Fetch-Site: cross-site' -H 'Content-Type: application/json' --data '{&quot;syllables&quot;:[&quot;bot&quot;,&quot;myr&quot;,&quot;rad&quot;,&quot;ret&quot;],&quot;mode&quot;:&quot;star&quot;,&quot;star&quot;:&quot;~pacfyl&quot;}' 'http://127.0.0.1:8741/api/v1/compose'</pre><h3>JSON request body</h3><pre>{
+  &quot;syllables&quot;: [
+    &quot;bot&quot;,
+    &quot;myr&quot;,
+    &quot;rad&quot;,
+    &quot;ret&quot;
+  ],
+  &quot;mode&quot;: &quot;star&quot;,
+  &quot;star&quot;: &quot;~pacfyl&quot;
+}</pre><h3>Captured response</h3><p>HTTP 403 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;CSRF_REJECTED&quot;,
+    &quot;message&quot;: &quot;Exact same-origin Origin is required&quot;
+  }
+}</pre><a href="reference/examples/error-origin.json">Open exact captured response</a></details><details class="api-example" id="example-error-planets-star-required"><summary>GET /api/v1/planets · error-planets-star-required</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/planets'</pre><h3>Captured response</h3><p>HTTP 400 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+    &quot;message&quot;: &quot;star must be an exact canonical star&quot;
+  }
+}</pre><a href="reference/examples/error-planets-star-required.json">Open exact captured response</a></details><details class="api-example" id="example-error-query"><summary>GET /api/v1/health?unknown=1 · error-query</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/health?unknown=1'</pre><h3>Captured response</h3><p>HTTP 400 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+    &quot;message&quot;: &quot;Unknown or duplicate query parameter&quot;
+  }
+}</pre><a href="reference/examples/error-query.json">Open exact captured response</a></details><details class="api-example" id="example-either-half-fixed"><summary>GET /api/v1/candidates?grouping=rows&amp;pairPlacement=fixed&amp;p0=rad&amp;p1=dev&amp;p2=bot&amp;p3=myr · either-half-fixed</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&amp;pairPlacement=fixed&amp;p0=rad&amp;p1=dev&amp;p2=bot&amp;p3=myr'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 1,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~raddev-botmyr&quot;,
+      &quot;id&quot;: &quot;3169956406&quot;,
+      &quot;syllables&quot;: [
+        &quot;rad&quot;,
+        &quot;dev&quot;,
+        &quot;bot&quot;,
+        &quot;myr&quot;
+      ],
+      &quot;parent&quot;: &quot;~linwyd&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 50,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/either-half-fixed.json">Open exact captured response</a></details><details class="api-example" id="example-either-half-swapped"><summary>GET /api/v1/candidates?grouping=rows&amp;pairPlacement=either&amp;p0=rad&amp;p1=dev&amp;p2=bot&amp;p3=myr · either-half-swapped</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&amp;pairPlacement=either&amp;p0=rad&amp;p1=dev&amp;p2=bot&amp;p3=myr'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 2,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~botmyr-raddev&quot;,
+      &quot;id&quot;: &quot;2371871526&quot;,
+      &quot;syllables&quot;: [
+        &quot;bot&quot;,
+        &quot;myr&quot;,
+        &quot;rad&quot;,
+        &quot;dev&quot;
+      ],
+      &quot;parent&quot;: &quot;~walsul&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~raddev-botmyr&quot;,
+      &quot;id&quot;: &quot;3169956406&quot;,
+      &quot;syllables&quot;: [
+        &quot;rad&quot;,
+        &quot;dev&quot;,
+        &quot;bot&quot;,
+        &quot;myr&quot;
+      ],
+      &quot;parent&quot;: &quot;~linwyd&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 50,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/either-half-swapped.json">Open exact captured response</a></details><details class="api-example" id="example-either-half-single-bottom-pattern"><summary>GET /api/v1/candidates?grouping=rows&amp;pairPlacement=either&amp;p2=rad&amp;p3=dev&amp;limit=2 · either-half-single-bottom-pattern</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&amp;pairPlacement=either&amp;p2=rad&amp;p3=dev&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 131070,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~bacbec-raddev&quot;,
+      &quot;id&quot;: &quot;2111419262&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bec&quot;,
+        &quot;rad&quot;,
+        &quot;dev&quot;
+      ],
+      &quot;parent&quot;: &quot;~dibnub&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~bacbel-raddev&quot;,
+      &quot;id&quot;: &quot;4222808651&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bel&quot;,
+        &quot;rad&quot;,
+        &quot;dev&quot;
+      ],
+      &quot;parent&quot;: &quot;~pitsem&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/either-half-single-bottom-pattern.json">Open exact captured response</a></details><details class="api-example" id="example-either-half-overlap"><summary>GET /api/v1/candidates?grouping=rows&amp;pairPlacement=either&amp;p0=rad&amp;p1=dev&amp;p2=rad&amp;limit=2 · either-half-overlap</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&amp;pairPlacement=either&amp;p0=rad&amp;p1=dev&amp;p2=rad&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 131070,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~bacbec-raddev&quot;,
+      &quot;id&quot;: &quot;2111419262&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bec&quot;,
+        &quot;rad&quot;,
+        &quot;dev&quot;
+      ],
+      &quot;parent&quot;: &quot;~dibnub&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~bacbel-raddev&quot;,
+      &quot;id&quot;: &quot;4222808651&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bel&quot;,
+        &quot;rad&quot;,
+        &quot;dev&quot;
+      ],
+      &quot;parent&quot;: &quot;~pitsem&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/either-half-overlap.json">Open exact captured response</a></details><details class="api-example" id="example-either-half-star"><summary>GET /api/v1/candidates?grouping=rows&amp;pairPlacement=either&amp;p0=bot&amp;p1=myr&amp;p2=rad&amp;p3=ret&amp;star=~pacfyl · either-half-star</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&amp;pairPlacement=either&amp;p0=bot&amp;p1=myr&amp;p2=rad&amp;p3=ret&amp;star=~pacfyl'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: &quot;~pacfyl&quot;,
+  &quot;total&quot;: 1,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~botmyr-radret&quot;,
+      &quot;id&quot;: &quot;1082103209&quot;,
+      &quot;syllables&quot;: [
+        &quot;bot&quot;,
+        &quot;myr&quot;,
+        &quot;rad&quot;,
+        &quot;ret&quot;
+      ],
+      &quot;parent&quot;: &quot;~pacfyl&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 50,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/either-half-star.json">Open exact captured response</a></details><details class="api-example" id="example-either-half-zero-word"><summary>GET /api/v1/candidates?grouping=rows&amp;pairPlacement=either&amp;p0=doz&amp;p1=zod&amp;limit=2 · either-half-zero-word</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&amp;pairPlacement=either&amp;p0=doz&amp;p1=zod&amp;limit=2'</pre><h3>Captured response</h3><p>HTTP 200 · application/json; charset=utf-8</p><pre>{
+  &quot;star&quot;: null,
+  &quot;total&quot;: 65535,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;~bacbec-dozzod&quot;,
+      &quot;id&quot;: &quot;275337592&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bec&quot;,
+        &quot;doz&quot;,
+        &quot;zod&quot;
+      ],
+      &quot;parent&quot;: &quot;~podfel&quot;
+    },
+    {
+      &quot;name&quot;: &quot;~bacbel-dozzod&quot;,
+      &quot;id&quot;: &quot;1197627469&quot;,
+      &quot;syllables&quot;: [
+        &quot;bac&quot;,
+        &quot;bel&quot;,
+        &quot;doz&quot;,
+        &quot;zod&quot;
+      ],
+      &quot;parent&quot;: &quot;~noprec&quot;
+    }
+  ],
+  &quot;offset&quot;: 0,
+  &quot;limit&quot;: 2,
+  &quot;availabilityChecked&quot;: false
+}</pre><a href="reference/examples/either-half-zero-word.json">Open exact captured response</a></details><details class="api-example" id="example-either-half-invalid"><summary>GET /api/v1/candidates?grouping=rows&amp;pairPlacement=&amp;p0=rad · either-half-invalid</summary><h3>Request</h3><pre>curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&amp;pairPlacement=&amp;p0=rad'</pre><h3>Captured response</h3><p>HTTP 400 · application/json; charset=utf-8</p><pre>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+    &quot;message&quot;: &quot;Invalid pair placement&quot;
+  }
+}</pre><a href="reference/examples/either-half-invalid.json">Open exact captured response</a></details></section><footer class="site-footer"><span>512 authentic glyphs. Fragments, not ship availability.</span><nav aria-label="Footer navigation"><a href="index.html">All glyphs</a><a href="prefixes.html">Prefixes</a><a href="suffixes.html">Suffixes</a><a href="shortlist.html">Shortlist</a><a href="workshop.html">Workshop</a><a href="api.html" aria-current="page">API</a></nav><span><a href="GLYPH-LICENSE.txt">Glyph license</a> · <a href="provenance.json">Provenance</a></span></footer></main></div><dialog id="glyph-dialog" class="dialog" aria-labelledby="glyph-title"><div class="dialog-head"><h2 id="glyph-title"></h2><button id="close-dialog" aria-label="Close glyph viewer">×</button></div><div class="large-pair"><figure><img id="detail-full" alt="" width="150" height="150"><figcaption>Full glyph</figcaption></figure><figure><img id="detail-base" alt="" width="150" height="150"><figcaption>Silhouette</figcaption></figure></div><p id="detail-meta" class="meta"></p><div class="dialog-actions"><button id="detail-save">Save to shortlist</button><button id="detail-use" class="primary">Use in workshop</button></div><div class="dialog-controls"><button id="previous-glyph">← Previous</button><span id="detail-position" class="meta"></span><button id="next-glyph">Next →</button></div></dialog><div id="toast" role="status" hidden></div><script id="glyph-data" type="application/json">[{"kind":"prefix","syllable":"bar","shape":"circle"},{"kind":"prefix","syllable":"bol","shape":"circle"},{"kind":"prefix","syllable":"dar","shape":"circle"},{"kind":"prefix","syllable":"dib","shape":"circle"},{"kind":"prefix","syllable":"dol","shape":"circle"},{"kind":"prefix","syllable":"dop","shape":"circle"},{"kind":"prefix","syllable":"doz","shape":"circle"},{"kind":"prefix","syllable":"fol","shape":"circle"},{"kind":"prefix","syllable":"fop","shape":"circle"},{"kind":"prefix","syllable":"hap","shape":"circle"},{"kind":"prefix","syllable":"har","shape":"circle"},{"kind":"prefix","syllable":"hol","shape":"circle"},{"kind":"prefix","syllable":"hop","shape":"circle"},{"kind":"prefix","syllable":"lar","shape":"circle"},{"kind":"prefix","syllable":"lib","shape":"circle"},{"kind":"prefix","syllable":"lig","shape":"circle"},{"kind":"prefix","syllable":"lop","shape":"circle"},{"kind":"prefix","syllable":"mar","shape":"circle"},{"kind":"prefix","syllable":"mol","shape":"circle"},{"kind":"prefix","syllable":"mop","shape":"circle"},{"kind":"prefix","syllable":"nar","shape":"circle"},{"kind":"prefix","syllable":"nib","shape":"circle"},{"kind":"prefix","syllable":"nol","shape":"circle"},{"kind":"prefix","syllable":"nop","shape":"circle"},{"kind":"prefix","syllable":"par","shape":"circle"},{"kind":"prefix","syllable":"pol","shape":"circle"},{"kind":"prefix","syllable":"rib","shape":"circle"},{"kind":"prefix","syllable":"rig","shape":"circle"},{"kind":"prefix","syllable":"rol","shape":"circle"},{"kind":"prefix","syllable":"rop","shape":"circle"},{"kind":"prefix","syllable":"sar","shape":"circle"},{"kind":"prefix","syllable":"sib","shape":"circle"},{"kind":"prefix","syllable":"sig","shape":"circle"},{"kind":"prefix","syllable":"sol","shape":"circle"},{"kind":"prefix","syllable":"sop","shape":"circle"},{"kind":"prefix","syllable":"tap","shape":"circle"},{"kind":"prefix","syllable":"tar","shape":"circle"},{"kind":"prefix","syllable":"tol","shape":"circle"},{"kind":"prefix","syllable":"top","shape":"circle"},{"kind":"prefix","syllable":"wol","shape":"circle"},{"kind":"prefix","syllable":"bin","shape":"square"},{"kind":"prefix","syllable":"das","shape":"square"},{"kind":"prefix","syllable":"din","shape":"square"},{"kind":"prefix","syllable":"div","shape":"square"},{"kind":"prefix","syllable":"dov","shape":"square"},{"kind":"prefix","syllable":"fas","shape":"square"},{"kind":"prefix","syllable":"fin","shape":"square"},{"kind":"prefix","syllable":"has","shape":"square"},{"kind":"prefix","syllable":"hin","shape":"square"},{"kind":"prefix","syllable":"las","shape":"square"},{"kind":"prefix","syllable":"lin","shape":"square"},{"kind":"prefix","syllable":"liv","shape":"square"},{"kind":"prefix","syllable":"lom","shape":"square"},{"kind":"prefix","syllable":"mas","shape":"square"},{"kind":"prefix","syllable":"min","shape":"square"},{"kind":"prefix","syllable":"nom","shape":"square"},{"kind":"prefix","syllable":"nov","shape":"square"},{"kind":"prefix","syllable":"pas","shape":"square"},{"kind":"prefix","syllable":"pin","shape":"square"},{"kind":"prefix","syllable":"rin","shape":"square"},{"kind":"prefix","syllable":"riv","shape":"square"},{"kind":"prefix","syllable":"rov","shape":"square"},{"kind":"prefix","syllable":"sip","shape":"square"},{"kind":"prefix","syllable":"siv","shape":"square"},{"kind":"prefix","syllable":"som","shape":"square"},{"kind":"prefix","syllable":"sov","shape":"square"},{"kind":"prefix","syllable":"tas","shape":"square"},{"kind":"prefix","syllable":"tin","shape":"square"},{"kind":"prefix","syllable":"tom","shape":"square"},{"kind":"prefix","syllable":"win","shape":"square"},{"kind":"prefix","syllable":"bal","shape":"leaf-down"},{"kind":"prefix","syllable":"bit","shape":"leaf-down"},{"kind":"prefix","syllable":"dal","shape":"leaf-down"},{"kind":"prefix","syllable":"fit","shape":"leaf-down"},{"kind":"prefix","syllable":"lit","shape":"leaf-down"},{"kind":"prefix","syllable":"loc","shape":"leaf-down"},{"kind":"prefix","syllable":"mal","shape":"leaf-down"},{"kind":"prefix","syllable":"mit","shape":"leaf-down"},{"kind":"prefix","syllable":"moc","shape":"leaf-down"},{"kind":"prefix","syllable":"nal","shape":"leaf-down"},{"kind":"prefix","syllable":"pal","shape":"leaf-down"},{"kind":"prefix","syllable":"pit","shape":"leaf-down"},{"kind":"prefix","syllable":"poc","shape":"leaf-down"},{"kind":"prefix","syllable":"rac","shape":"leaf-down"},{"kind":"prefix","syllable":"ral","shape":"leaf-down"},{"kind":"prefix","syllable":"rit","shape":"leaf-down"},{"kind":"prefix","syllable":"roc","shape":"leaf-down"},{"kind":"prefix","syllable":"sal","shape":"leaf-down"},{"kind":"prefix","syllable":"sit","shape":"leaf-down"},{"kind":"prefix","syllable":"tal","shape":"leaf-down"},{"kind":"prefix","syllable":"toc","shape":"leaf-down"},{"kind":"prefix","syllable":"doc","shape":"leaf-up"},{"kind":"prefix","syllable":"fal","shape":"leaf-up"},{"kind":"prefix","syllable":"hal","shape":"leaf-up"},{"kind":"prefix","syllable":"soc","shape":"leaf-up"},{"kind":"prefix","syllable":"wal","shape":"leaf-up"},{"kind":"prefix","syllable":"wit","shape":"leaf-up"},{"kind":"prefix","syllable":"fad","shape":"q-tl"},{"kind":"prefix","syllable":"fos","shape":"q-tl"},{"kind":"prefix","syllable":"had","shape":"q-tl"},{"kind":"prefix","syllable":"han","shape":"q-tl"},{"kind":"prefix","syllable":"bac","shape":"q-tr"},{"kind":"prefix","syllable":"ban","shape":"q-tr"},{"kind":"prefix","syllable":"bat","shape":"q-tr"},{"kind":"prefix","syllable":"bic","shape":"q-tr"},{"kind":"prefix","syllable":"bid","shape":"q-tr"},{"kind":"prefix","syllable":"bis","shape":"q-tr"},{"kind":"prefix","syllable":"bos","shape":"q-tr"},{"kind":"prefix","syllable":"dab","shape":"q-tr"},{"kind":"prefix","syllable":"dac","shape":"q-tr"},{"kind":"prefix","syllable":"dap","shape":"q-tr"},{"kind":"prefix","syllable":"dat","shape":"q-tr"},{"kind":"prefix","syllable":"dif","shape":"q-tr"},{"kind":"prefix","syllable":"dir","shape":"q-tr"},{"kind":"prefix","syllable":"dos","shape":"q-tr"},{"kind":"prefix","syllable":"fab","shape":"q-tr"},{"kind":"prefix","syllable":"fid","shape":"q-tr"},{"kind":"prefix","syllable":"fir","shape":"q-tr"},{"kind":"prefix","syllable":"hab","shape":"q-tr"},{"kind":"prefix","syllable":"hac","shape":"q-tr"},{"kind":"prefix","syllable":"hat","shape":"q-tr"},{"kind":"prefix","syllable":"hav","shape":"q-tr"},{"kind":"prefix","syllable":"hid","shape":"q-tr"},{"kind":"prefix","syllable":"hos","shape":"q-tr"},{"kind":"prefix","syllable":"lac","shape":"q-tr"},{"kind":"prefix","syllable":"lap","shape":"q-tr"},{"kind":"prefix","syllable":"lat","shape":"q-tr"},{"kind":"prefix","syllable":"lid","shape":"q-tr"},{"kind":"prefix","syllable":"los","shape":"q-tr"},{"kind":"prefix","syllable":"mac","shape":"q-tr"},{"kind":"prefix","syllable":"mat","shape":"q-tr"},{"kind":"prefix","syllable":"mid","shape":"q-tr"},{"kind":"prefix","syllable":"mir","shape":"q-tr"},{"kind":"prefix","syllable":"mos","shape":"q-tr"},{"kind":"prefix","syllable":"nac","shape":"q-tr"},{"kind":"prefix","syllable":"nat","shape":"q-tr"},{"kind":"prefix","syllable":"nav","shape":"q-tr"},{"kind":"prefix","syllable":"nid","shape":"q-tr"},{"kind":"prefix","syllable":"nos","shape":"q-tr"},{"kind":"prefix","syllable":"pac","shape":"q-tr"},{"kind":"prefix","syllable":"pad","shape":"q-tr"},{"kind":"prefix","syllable":"pan","shape":"q-tr"},{"kind":"prefix","syllable":"pat","shape":"q-tr"},{"kind":"prefix","syllable":"pid","shape":"q-tr"},{"kind":"prefix","syllable":"pos","shape":"q-tr"},{"kind":"prefix","syllable":"rap","shape":"q-tr"},{"kind":"prefix","syllable":"rav","shape":"q-tr"},{"kind":"prefix","syllable":"rid","shape":"q-tr"},{"kind":"prefix","syllable":"ros","shape":"q-tr"},{"kind":"prefix","syllable":"sab","shape":"q-tr"},{"kind":"prefix","syllable":"san","shape":"q-tr"},{"kind":"prefix","syllable":"sap","shape":"q-tr"},{"kind":"prefix","syllable":"sat","shape":"q-tr"},{"kind":"prefix","syllable":"sic","shape":"q-tr"},{"kind":"prefix","syllable":"sid","shape":"q-tr"},{"kind":"prefix","syllable":"tab","shape":"q-tr"},{"kind":"prefix","syllable":"tac","shape":"q-tr"},{"kind":"prefix","syllable":"tad","shape":"q-tr"},{"kind":"prefix","syllable":"tan","shape":"q-tr"},{"kind":"prefix","syllable":"tic","shape":"q-tr"},{"kind":"prefix","syllable":"tid","shape":"q-tr"},{"kind":"prefix","syllable":"tir","shape":"q-tr"},{"kind":"prefix","syllable":"wac","shape":"q-tr"},{"kind":"prefix","syllable":"wan","shape":"q-tr"},{"kind":"prefix","syllable":"wat","shape":"q-tr"},{"kind":"prefix","syllable":"wid","shape":"q-tr"},{"kind":"prefix","syllable":"wis","shape":"q-tr"},{"kind":"prefix","syllable":"lis","shape":"q-bl"},{"kind":"prefix","syllable":"mic","shape":"q-bl"},{"kind":"prefix","syllable":"pic","shape":"q-bl"},{"kind":"prefix","syllable":"rad","shape":"q-bl"},{"kind":"prefix","syllable":"ric","shape":"q-bl"},{"kind":"prefix","syllable":"bon","shape":"q-br"},{"kind":"prefix","syllable":"dis","shape":"q-br"},{"kind":"prefix","syllable":"don","shape":"q-br"},{"kind":"prefix","syllable":"fog","shape":"q-br"},{"kind":"prefix","syllable":"fon","shape":"q-br"},{"kind":"prefix","syllable":"lab","shape":"q-br"},{"kind":"prefix","syllable":"lad","shape":"q-br"},{"kind":"prefix","syllable":"lav","shape":"q-br"},{"kind":"prefix","syllable":"lon","shape":"q-br"},{"kind":"prefix","syllable":"map","shape":"q-br"},{"kind":"prefix","syllable":"mip","shape":"q-br"},{"kind":"prefix","syllable":"mis","shape":"q-br"},{"kind":"prefix","syllable":"mog","shape":"q-br"},{"kind":"prefix","syllable":"mon","shape":"q-br"},{"kind":"prefix","syllable":"nap","shape":"q-br"},{"kind":"prefix","syllable":"nis","shape":"q-br"},{"kind":"prefix","syllable":"pon","shape":"q-br"},{"kind":"prefix","syllable":"rab","shape":"q-br"},{"kind":"prefix","syllable":"ris","shape":"q-br"},{"kind":"prefix","syllable":"ron","shape":"q-br"},{"kind":"prefix","syllable":"sog","shape":"q-br"},{"kind":"prefix","syllable":"son","shape":"q-br"},{"kind":"prefix","syllable":"tip","shape":"q-br"},{"kind":"prefix","syllable":"tog","shape":"q-br"},{"kind":"prefix","syllable":"ton","shape":"q-br"},{"kind":"prefix","syllable":"wic","shape":"q-br"},{"kind":"prefix","syllable":"bil","shape":"d-left"},{"kind":"prefix","syllable":"bor","shape":"d-left"},{"kind":"prefix","syllable":"bot","shape":"d-left"},{"kind":"prefix","syllable":"dan","shape":"d-left"},{"kind":"prefix","syllable":"dav","shape":"d-left"},{"kind":"prefix","syllable":"dig","shape":"d-left"},{"kind":"prefix","syllable":"dil","shape":"d-left"},{"kind":"prefix","syllable":"dor","shape":"d-left"},{"kind":"prefix","syllable":"dot","shape":"d-left"},{"kind":"prefix","syllable":"fam","shape":"d-left"},{"kind":"prefix","syllable":"fan","shape":"d-left"},{"kind":"prefix","syllable":"fig","shape":"d-left"},{"kind":"prefix","syllable":"fil","shape":"d-left"},{"kind":"prefix","syllable":"fip","shape":"d-left"},{"kind":"prefix","syllable":"fod","shape":"d-left"},{"kind":"prefix","syllable":"for","shape":"d-left"},{"kind":"prefix","syllable":"fot","shape":"d-left"},{"kind":"prefix","syllable":"hil","shape":"d-left"},{"kind":"prefix","syllable":"hoc","shape":"d-left"},{"kind":"prefix","syllable":"hod","shape":"d-left"},{"kind":"prefix","syllable":"lag","shape":"d-left"},{"kind":"prefix","syllable":"lan","shape":"d-left"},{"kind":"prefix","syllable":"lod","shape":"d-left"},{"kind":"prefix","syllable":"lor","shape":"d-left"},{"kind":"prefix","syllable":"mag","shape":"d-left"},{"kind":"prefix","syllable":"mig","shape":"d-left"},{"kind":"prefix","syllable":"mil","shape":"d-left"},{"kind":"prefix","syllable":"mod","shape":"d-left"},{"kind":"prefix","syllable":"mor","shape":"d-left"},{"kind":"prefix","syllable":"mot","shape":"d-left"},{"kind":"prefix","syllable":"nam","shape":"d-left"},{"kind":"prefix","syllable":"nil","shape":"d-left"},{"kind":"prefix","syllable":"noc","shape":"d-left"},{"kind":"prefix","syllable":"nod","shape":"d-left"},{"kind":"prefix","syllable":"nor","shape":"d-left"},{"kind":"prefix","syllable":"pag","shape":"d-left"},{"kind":"prefix","syllable":"pil","shape":"d-left"},{"kind":"prefix","syllable":"pod","shape":"d-left"},{"kind":"prefix","syllable":"rag","shape":"d-left"},{"kind":"prefix","syllable":"ram","shape":"d-left"},{"kind":"prefix","syllable":"ran","shape":"d-left"},{"kind":"prefix","syllable":"ril","shape":"d-left"},{"kind":"prefix","syllable":"rip","shape":"d-left"},{"kind":"prefix","syllable":"sam","shape":"d-left"},{"kind":"prefix","syllable":"sav","shape":"d-left"},{"kind":"prefix","syllable":"sil","shape":"d-left"},{"kind":"prefix","syllable":"sor","shape":"d-left"},{"kind":"prefix","syllable":"tag","shape":"d-left"},{"kind":"prefix","syllable":"tam","shape":"d-left"},{"kind":"prefix","syllable":"til","shape":"d-left"},{"kind":"prefix","syllable":"tod","shape":"d-left"},{"kind":"prefix","syllable":"tor","shape":"d-left"},{"kind":"prefix","syllable":"wor","shape":"d-left"},{"kind":"prefix","syllable":"hob","shape":"d-top"},{"kind":"prefix","syllable":"nim","shape":"d-top"},{"kind":"prefix","syllable":"sim","shape":"d-top"},{"kind":"prefix","syllable":"tim","shape":"d-top"},{"kind":"prefix","syllable":"tob","shape":"d-top"},{"kind":"suffix","syllable":"bet","shape":"circle"},{"kind":"suffix","syllable":"dem","shape":"circle"},{"kind":"suffix","syllable":"det","shape":"circle"},{"kind":"suffix","syllable":"dul","shape":"circle"},{"kind":"suffix","syllable":"fed","shape":"circle"},{"kind":"suffix","syllable":"fet","shape":"circle"},{"kind":"suffix","syllable":"ful","shape":"circle"},{"kind":"suffix","syllable":"het","shape":"circle"},{"kind":"suffix","syllable":"hul","shape":"circle"},{"kind":"suffix","syllable":"led","shape":"circle"},{"kind":"suffix","syllable":"let","shape":"circle"},{"kind":"suffix","syllable":"lun","shape":"circle"},{"kind":"suffix","syllable":"med","shape":"circle"},{"kind":"suffix","syllable":"met","shape":"circle"},{"kind":"suffix","syllable":"mul","shape":"circle"},{"kind":"suffix","syllable":"mun","shape":"circle"},{"kind":"suffix","syllable":"ned","shape":"circle"},{"kind":"suffix","syllable":"nem","shape":"circle"},{"kind":"suffix","syllable":"net","shape":"circle"},{"kind":"suffix","syllable":"nul","shape":"circle"},{"kind":"suffix","syllable":"ped","shape":"circle"},{"kind":"suffix","syllable":"pem","shape":"circle"},{"kind":"suffix","syllable":"pet","shape":"circle"},{"kind":"suffix","syllable":"pun","shape":"circle"},{"kind":"suffix","syllable":"red","shape":"circle"},{"kind":"suffix","syllable":"rem","shape":"circle"},{"kind":"suffix","syllable":"ret","shape":"circle"},{"kind":"suffix","syllable":"rul","shape":"circle"},{"kind":"suffix","syllable":"sed","shape":"circle"},{"kind":"suffix","syllable":"sem","shape":"circle"},{"kind":"suffix","syllable":"set","shape":"circle"},{"kind":"suffix","syllable":"sul","shape":"circle"},{"kind":"suffix","syllable":"sun","shape":"circle"},{"kind":"suffix","syllable":"ted","shape":"circle"},{"kind":"suffix","syllable":"tem","shape":"circle"},{"kind":"suffix","syllable":"tul","shape":"circle"},{"kind":"suffix","syllable":"wed","shape":"circle"},{"kind":"suffix","syllable":"wet","shape":"circle"},{"kind":"suffix","syllable":"zod","shape":"circle"},{"kind":"suffix","syllable":"ben","shape":"square"},{"kind":"suffix","syllable":"deb","shape":"square"},{"kind":"suffix","syllable":"deg","shape":"square"},{"kind":"suffix","syllable":"den","shape":"square"},{"kind":"suffix","syllable":"dut","shape":"square"},{"kind":"suffix","syllable":"feb","shape":"square"},{"kind":"suffix","syllable":"fen","shape":"square"},{"kind":"suffix","syllable":"heb","shape":"square"},{"kind":"suffix","syllable":"hut","shape":"square"},{"kind":"suffix","syllable":"leb","shape":"square"},{"kind":"suffix","syllable":"leg","shape":"square"},{"kind":"suffix","syllable":"len","shape":"square"},{"kind":"suffix","syllable":"lut","shape":"square"},{"kind":"suffix","syllable":"meb","shape":"square"},{"kind":"suffix","syllable":"meg","shape":"square"},{"kind":"suffix","syllable":"mut","shape":"square"},{"kind":"suffix","syllable":"neb","shape":"square"},{"kind":"suffix","syllable":"nut","shape":"square"},{"kind":"suffix","syllable":"peg","shape":"square"},{"kind":"suffix","syllable":"pen","shape":"square"},{"kind":"suffix","syllable":"put","shape":"square"},{"kind":"suffix","syllable":"reb","shape":"square"},{"kind":"suffix","syllable":"reg","shape":"square"},{"kind":"suffix","syllable":"ren","shape":"square"},{"kind":"suffix","syllable":"rut","shape":"square"},{"kind":"suffix","syllable":"seb","shape":"square"},{"kind":"suffix","syllable":"seg","shape":"square"},{"kind":"suffix","syllable":"sen","shape":"square"},{"kind":"suffix","syllable":"sut","shape":"square"},{"kind":"suffix","syllable":"teb","shape":"square"},{"kind":"suffix","syllable":"teg","shape":"square"},{"kind":"suffix","syllable":"ten","shape":"square"},{"kind":"suffix","syllable":"web","shape":"square"},{"kind":"suffix","syllable":"weg","shape":"square"},{"kind":"suffix","syllable":"wen","shape":"square"},{"kind":"suffix","syllable":"def","shape":"leaf-down"},{"kind":"suffix","syllable":"lyd","shape":"leaf-down"},{"kind":"suffix","syllable":"nyd","shape":"leaf-down"},{"kind":"suffix","syllable":"ref","shape":"leaf-down"},{"kind":"suffix","syllable":"ryd","shape":"leaf-down"},{"kind":"suffix","syllable":"sef","shape":"leaf-down"},{"kind":"suffix","syllable":"syd","shape":"leaf-down"},{"kind":"suffix","syllable":"tyd","shape":"leaf-down"},{"kind":"suffix","syllable":"wyd","shape":"leaf-down"},{"kind":"suffix","syllable":"bel","shape":"leaf-up"},{"kind":"suffix","syllable":"byr","shape":"leaf-up"},{"kind":"suffix","syllable":"del","shape":"leaf-up"},{"kind":"suffix","syllable":"dyr","shape":"leaf-up"},{"kind":"suffix","syllable":"fel","shape":"leaf-up"},{"kind":"suffix","syllable":"fyr","shape":"leaf-up"},{"kind":"suffix","syllable":"lyr","shape":"leaf-up"},{"kind":"suffix","syllable":"mel","shape":"leaf-up"},{"kind":"suffix","syllable":"myr","shape":"leaf-up"},{"kind":"suffix","syllable":"nel","shape":"leaf-up"},{"kind":"suffix","syllable":"nyr","shape":"leaf-up"},{"kind":"suffix","syllable":"pel","shape":"leaf-up"},{"kind":"suffix","syllable":"rel","shape":"leaf-up"},{"kind":"suffix","syllable":"sel","shape":"leaf-up"},{"kind":"suffix","syllable":"syr","shape":"leaf-up"},{"kind":"suffix","syllable":"tel","shape":"leaf-up"},{"kind":"suffix","syllable":"tyr","shape":"leaf-up"},{"kind":"suffix","syllable":"tyv","shape":"leaf-up"},{"kind":"suffix","syllable":"wel","shape":"leaf-up"},{"kind":"suffix","syllable":"bur","shape":"q-tl"},{"kind":"suffix","syllable":"byl","shape":"q-tl"},{"kind":"suffix","syllable":"byn","shape":"q-tl"},{"kind":"suffix","syllable":"dux","shape":"q-tl"},{"kind":"suffix","syllable":"dyn","shape":"q-tl"},{"kind":"suffix","syllable":"fur","shape":"q-tl"},{"kind":"suffix","syllable":"fyl","shape":"q-tl"},{"kind":"suffix","syllable":"fyn","shape":"q-tl"},{"kind":"suffix","syllable":"lux","shape":"q-tl"},{"kind":"suffix","syllable":"lyn","shape":"q-tl"},{"kind":"suffix","syllable":"lyx","shape":"q-tl"},{"kind":"suffix","syllable":"myl","shape":"q-tl"},{"kind":"suffix","syllable":"myn","shape":"q-tl"},{"kind":"suffix","syllable":"nym","shape":"q-tl"},{"kind":"suffix","syllable":"nyx","shape":"q-tl"},{"kind":"suffix","syllable":"pur","shape":"q-tl"},{"kind":"suffix","syllable":"pyx","shape":"q-tl"},{"kind":"suffix","syllable":"rum","shape":"q-tl"},{"kind":"suffix","syllable":"ryg","shape":"q-tl"},{"kind":"suffix","syllable":"rym","shape":"q-tl"},{"kind":"suffix","syllable":"ryn","shape":"q-tl"},{"kind":"suffix","syllable":"ryp","shape":"q-tl"},{"kind":"suffix","syllable":"ryx","shape":"q-tl"},{"kind":"suffix","syllable":"sum","shape":"q-tl"},{"kind":"suffix","syllable":"syl","shape":"q-tl"},{"kind":"suffix","syllable":"sym","shape":"q-tl"},{"kind":"suffix","syllable":"syn","shape":"q-tl"},{"kind":"suffix","syllable":"syp","shape":"q-tl"},{"kind":"suffix","syllable":"syx","shape":"q-tl"},{"kind":"suffix","syllable":"tyn","shape":"q-tl"},{"kind":"suffix","syllable":"typ","shape":"q-tl"},{"kind":"suffix","syllable":"wyn","shape":"q-tl"},{"kind":"suffix","syllable":"wyx","shape":"q-tl"},{"kind":"suffix","syllable":"ryl","shape":"q-tr"},{"kind":"suffix","syllable":"bec","shape":"q-bl"},{"kind":"suffix","syllable":"bes","shape":"q-bl"},{"kind":"suffix","syllable":"bud","shape":"q-bl"},{"kind":"suffix","syllable":"bus","shape":"q-bl"},{"kind":"suffix","syllable":"dec","shape":"q-bl"},{"kind":"suffix","syllable":"duc","shape":"q-bl"},{"kind":"suffix","syllable":"dus","shape":"q-bl"},{"kind":"suffix","syllable":"dyl","shape":"q-bl"},{"kind":"suffix","syllable":"dys","shape":"q-bl"},{"kind":"suffix","syllable":"fep","shape":"q-bl"},{"kind":"suffix","syllable":"fus","shape":"q-bl"},{"kind":"suffix","syllable":"hec","shape":"q-bl"},{"kind":"suffix","syllable":"hep","shape":"q-bl"},{"kind":"suffix","syllable":"hus","shape":"q-bl"},{"kind":"suffix","syllable":"lec","shape":"q-bl"},{"kind":"suffix","syllable":"luc","shape":"q-bl"},{"kind":"suffix","syllable":"lud","shape":"q-bl"},{"kind":"suffix","syllable":"lur","shape":"q-bl"},{"kind":"suffix","syllable":"lus","shape":"q-bl"},{"kind":"suffix","syllable":"lys","shape":"q-bl"},{"kind":"suffix","syllable":"mec","shape":"q-bl"},{"kind":"suffix","syllable":"mes","shape":"q-bl"},{"kind":"suffix","syllable":"mud","shape":"q-bl"},{"kind":"suffix","syllable":"mur","shape":"q-bl"},{"kind":"suffix","syllable":"mus","shape":"q-bl"},{"kind":"suffix","syllable":"nec","shape":"q-bl"},{"kind":"suffix","syllable":"nep","shape":"q-bl"},{"kind":"suffix","syllable":"nub","shape":"q-bl"},{"kind":"suffix","syllable":"num","shape":"q-bl"},{"kind":"suffix","syllable":"nus","shape":"q-bl"},{"kind":"suffix","syllable":"nux","shape":"q-bl"},{"kind":"suffix","syllable":"nyl","shape":"q-bl"},{"kind":"suffix","syllable":"nys","shape":"q-bl"},{"kind":"suffix","syllable":"pec","shape":"q-bl"},{"kind":"suffix","syllable":"pub","shape":"q-bl"},{"kind":"suffix","syllable":"pyl","shape":"q-bl"},{"kind":"suffix","syllable":"rec","shape":"q-bl"},{"kind":"suffix","syllable":"ruc","shape":"q-bl"},{"kind":"suffix","syllable":"rud","shape":"q-bl"},{"kind":"suffix","syllable":"rus","shape":"q-bl"},{"kind":"suffix","syllable":"rux","shape":"q-bl"},{"kind":"suffix","syllable":"ryc","shape":"q-bl"},{"kind":"suffix","syllable":"rys","shape":"q-bl"},{"kind":"suffix","syllable":"sec","shape":"q-bl"},{"kind":"suffix","syllable":"sub","shape":"q-bl"},{"kind":"suffix","syllable":"sud","shape":"q-bl"},{"kind":"suffix","syllable":"sur","shape":"q-bl"},{"kind":"suffix","syllable":"tec","shape":"q-bl"},{"kind":"suffix","syllable":"tuc","shape":"q-bl"},{"kind":"suffix","syllable":"tud","shape":"q-bl"},{"kind":"suffix","syllable":"tus","shape":"q-bl"},{"kind":"suffix","syllable":"tux","shape":"q-bl"},{"kind":"suffix","syllable":"tyc","shape":"q-bl"},{"kind":"suffix","syllable":"tyl","shape":"q-bl"},{"kind":"suffix","syllable":"wyc","shape":"q-bl"},{"kind":"suffix","syllable":"wyl","shape":"q-bl"},{"kind":"suffix","syllable":"bep","shape":"q-br"},{"kind":"suffix","syllable":"dep","shape":"q-br"},{"kind":"suffix","syllable":"des","shape":"q-br"},{"kind":"suffix","syllable":"fes","shape":"q-br"},{"kind":"suffix","syllable":"hes","shape":"q-br"},{"kind":"suffix","syllable":"lep","shape":"q-br"},{"kind":"suffix","syllable":"mep","shape":"q-br"},{"kind":"suffix","syllable":"nes","shape":"q-br"},{"kind":"suffix","syllable":"pes","shape":"q-br"},{"kind":"suffix","syllable":"rep","shape":"q-br"},{"kind":"suffix","syllable":"res","shape":"q-br"},{"kind":"suffix","syllable":"sep","shape":"q-br"},{"kind":"suffix","syllable":"tep","shape":"q-br"},{"kind":"suffix","syllable":"tes","shape":"q-br"},{"kind":"suffix","syllable":"wep","shape":"q-br"},{"kind":"suffix","syllable":"wes","shape":"q-br"},{"kind":"suffix","syllable":"ber","shape":"d-right"},{"kind":"suffix","syllable":"bex","shape":"d-right"},{"kind":"suffix","syllable":"byt","shape":"d-right"},{"kind":"suffix","syllable":"dev","shape":"d-right"},{"kind":"suffix","syllable":"dex","shape":"d-right"},{"kind":"suffix","syllable":"dun","shape":"d-right"},{"kind":"suffix","syllable":"dyt","shape":"d-right"},{"kind":"suffix","syllable":"fer","shape":"d-right"},{"kind":"suffix","syllable":"fex","shape":"d-right"},{"kind":"suffix","syllable":"hex","shape":"d-right"},{"kind":"suffix","syllable":"ler","shape":"d-right"},{"kind":"suffix","syllable":"lev","shape":"d-right"},{"kind":"suffix","syllable":"lex","shape":"d-right"},{"kind":"suffix","syllable":"lug","shape":"d-right"},{"kind":"suffix","syllable":"lup","shape":"d-right"},{"kind":"suffix","syllable":"lyt","shape":"d-right"},{"kind":"suffix","syllable":"mer","shape":"d-right"},{"kind":"suffix","syllable":"mev","shape":"d-right"},{"kind":"suffix","syllable":"mex","shape":"d-right"},{"kind":"suffix","syllable":"mug","shape":"d-right"},{"kind":"suffix","syllable":"ner","shape":"d-right"},{"kind":"suffix","syllable":"nev","shape":"d-right"},{"kind":"suffix","syllable":"nex","shape":"d-right"},{"kind":"suffix","syllable":"nup","shape":"d-right"},{"kind":"suffix","syllable":"nyt","shape":"d-right"},{"kind":"suffix","syllable":"pex","shape":"d-right"},{"kind":"suffix","syllable":"rev","shape":"d-right"},{"kind":"suffix","syllable":"rex","shape":"d-right"},{"kind":"suffix","syllable":"run","shape":"d-right"},{"kind":"suffix","syllable":"rup","shape":"d-right"},{"kind":"suffix","syllable":"ryt","shape":"d-right"},{"kind":"suffix","syllable":"sev","shape":"d-right"},{"kind":"suffix","syllable":"sug","shape":"d-right"},{"kind":"suffix","syllable":"sup","shape":"d-right"},{"kind":"suffix","syllable":"syt","shape":"d-right"},{"kind":"suffix","syllable":"tev","shape":"d-right"},{"kind":"suffix","syllable":"tex","shape":"d-right"},{"kind":"suffix","syllable":"tug","shape":"d-right"},{"kind":"suffix","syllable":"wex","shape":"d-right"},{"kind":"suffix","syllable":"wyt","shape":"d-right"},{"kind":"suffix","syllable":"fun","shape":"d-top"},{"kind":"suffix","syllable":"tun","shape":"d-top"},{"kind":"suffix","syllable":"der","shape":"d-bottom"},{"kind":"suffix","syllable":"dur","shape":"d-bottom"},{"kind":"suffix","syllable":"per","shape":"d-bottom"},{"kind":"suffix","syllable":"ser","shape":"d-bottom"},{"kind":"suffix","syllable":"ter","shape":"d-bottom"},{"kind":"suffix","syllable":"wer","shape":"d-bottom"}]</script></body></html>

@@ -1,0 +1,77 @@
+{
+  "notice": "Actual additive captures; no historical responses overwritten.",
+  "capturedOrigin": "http://127.0.0.1:64127",
+  "count": 7,
+  "items": [
+    {
+      "label": "either-half-fixed",
+      "method": "GET",
+      "route": "/api/v1/candidates?grouping=rows&pairPlacement=fixed&p0=rad&p1=dev&p2=bot&p3=myr",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "file": "either-half-fixed.json",
+      "sha256": "d2202a75f91105a0d878097e8e246af256f5baa10619b0331a0c75c1edc8f5d0",
+      "curl": "curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&pairPlacement=fixed&p0=rad&p1=dev&p2=bot&p3=myr'"
+    },
+    {
+      "label": "either-half-swapped",
+      "method": "GET",
+      "route": "/api/v1/candidates?grouping=rows&pairPlacement=either&p0=rad&p1=dev&p2=bot&p3=myr",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "file": "either-half-swapped.json",
+      "sha256": "dab1539b731e57e4532154948d901001e8a4035220c2a0ee1bd5daeeabee67c3",
+      "curl": "curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&pairPlacement=either&p0=rad&p1=dev&p2=bot&p3=myr'"
+    },
+    {
+      "label": "either-half-single-bottom-pattern",
+      "method": "GET",
+      "route": "/api/v1/candidates?grouping=rows&pairPlacement=either&p2=rad&p3=dev&limit=2",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "file": "either-half-single-bottom-pattern.json",
+      "sha256": "36e066591146a9b7f30e297d601540003efc6e8bf441fd037384befd8ae11f4b",
+      "curl": "curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&pairPlacement=either&p2=rad&p3=dev&limit=2'"
+    },
+    {
+      "label": "either-half-overlap",
+      "method": "GET",
+      "route": "/api/v1/candidates?grouping=rows&pairPlacement=either&p0=rad&p1=dev&p2=rad&limit=2",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "file": "either-half-overlap.json",
+      "sha256": "36e066591146a9b7f30e297d601540003efc6e8bf441fd037384befd8ae11f4b",
+      "curl": "curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&pairPlacement=either&p0=rad&p1=dev&p2=rad&limit=2'"
+    },
+    {
+      "label": "either-half-star",
+      "method": "GET",
+      "route": "/api/v1/candidates?grouping=rows&pairPlacement=either&p0=bot&p1=myr&p2=rad&p3=ret&star=~pacfyl",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "file": "either-half-star.json",
+      "sha256": "27d1c804e1e0f7f5c7a918f135c5b9e16f6348d5fba8a1a2e7cf06d56149b950",
+      "curl": "curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&pairPlacement=either&p0=bot&p1=myr&p2=rad&p3=ret&star=~pacfyl'"
+    },
+    {
+      "label": "either-half-zero-word",
+      "method": "GET",
+      "route": "/api/v1/candidates?grouping=rows&pairPlacement=either&p0=doz&p1=zod&limit=2",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "file": "either-half-zero-word.json",
+      "sha256": "f07a7e1fb98acc10772833f41b4e20eeab209bf5bea7f1b946feff375171e179",
+      "curl": "curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&pairPlacement=either&p0=doz&p1=zod&limit=2'"
+    },
+    {
+      "label": "either-half-invalid",
+      "method": "GET",
+      "route": "/api/v1/candidates?grouping=rows&pairPlacement=&p0=rad",
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "file": "either-half-invalid.json",
+      "sha256": "4c242ab0dca02c9984c9d93bac1bc3f10c65def5e91a7857ddf10195d8c4cb53",
+      "curl": "curl -sS 'http://127.0.0.1:8741/api/v1/candidates?grouping=rows&pairPlacement=&p0=rad'"
+    }
+  ]
+}
