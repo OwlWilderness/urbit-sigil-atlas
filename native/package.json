@@ -1,0 +1,19 @@
+{
+  "name": "sigformel-urbit",
+  "version": "0.1.1",
+  "private": true,
+  "description": "Native Urbit glyph atlas and Hoon-authoritative name workshop",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build:native": "python3 -B tools/build-native.py"
+  },
+  "dependencies": {
+    "urbit-ob": "5.0.1"
+  },
+  "devDependencies": {
+    "@urbit/http-api": "2.3.0",
+    "playwright": "1.58.2"
+  }
+}

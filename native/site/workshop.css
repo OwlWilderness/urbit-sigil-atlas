@@ -1,0 +1,216 @@
+/* Workshop square successor: composition is normal flow, never a sticky dock. */
+.slot-dock{position:static;background:var(--paper);min-width:0}
+.dock-caption{display:flex;align-items:center;gap:15px;justify-content:space-between;margin-bottom:8px}
+.dock-caption p{font-size:12px;color:var(--muted);margin:0}
+.dock-actions{display:flex;gap:6px;flex-shrink:0}
+.dock-caption button{font-size:11px;min-height:36px;padding:7px 10px}
+.slot-column{min-width:0}
+.search-logic{display:flex;align-items:center;gap:6px 12px;flex-wrap:wrap;margin-top:8px;font-size:11px;min-width:0}
+.join-control{display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;max-width:100%}
+.join-control [data-join-label]{flex-basis:100%;overflow-wrap:anywhere}
+.search-expression-group{display:block;border-left:2px solid var(--rule);padding:6px 9px;margin:6px 0}
+.search-expression-either{display:block;font-weight:bold}
+.join-control[hidden]{display:none!important}
+.join-control select{min-height:30px;padding:3px 6px;font-size:11px;width:auto}
+#search-expression{flex-basis:100%;margin:0;overflow-wrap:anywhere;font-size:12px}
+#search-logic-help{color:var(--muted);font-size:10px}
+.slot-dock .slot{min-width:0;padding:5px;border:1px solid var(--rule);display:flex;flex-direction:column;align-items:stretch;gap:3px;background:var(--panel);height:160px}
+.slot[data-active=true]{border-color:var(--accent)}
+.slot [data-slot-select]{padding:2px;min-height:26px;font-size:11px;background:transparent;border:0}
+.slot [data-slot-art]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:2px;min-height:0;flex:1;background:transparent;border:0;cursor:pointer;overflow:hidden}
+.slot [data-slot-art][draggable=true]{cursor:grab}
+.slot-art{height:42px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.slot-actions{display:flex;align-items:center;justify-content:center;gap:4px}
+.slot-actions button{min-height:28px;padding:2px 5px;font-size:11px;background:transparent}
+.slot [data-slot-copy]{cursor:grab}
+.slot [data-slot-clear]{display:flex;align-items:center;justify-content:center;line-height:1;width:28px}
+.slot-controls{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:6px;min-width:0}
+.slot-controls input[data-slot-input]{width:54px;min-width:0;min-height:34px;height:34px;padding:4px;font:16px ui-monospace,SFMono-Regular,Consolas,monospace;text-align:center}
+.slot-controls input[aria-invalid=true]{border:2px solid var(--accent)}
+.slot-error{display:block;font-size:10px;line-height:1.3;color:var(--accent);overflow-wrap:anywhere;margin-top:4px}
+.slot-error:empty{display:none}
+.slot-enable{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:34px;flex-shrink:0;cursor:pointer}
+.slot-enable input{position:absolute;inset:0;width:100%;height:100%;min-height:0;padding:0;margin:0;opacity:0;cursor:pointer}
+.slot-enable-icon{display:flex;align-items:center;justify-content:center;width:26px;height:28px;border:1px solid var(--rule);border-radius:4px;font-size:20px;pointer-events:none;background:var(--panel)}
+.slot-enable-icon [data-eye="open"]{display:none}
+.slot-enable-icon [data-eye="off"]{display:block;color:var(--muted)}
+.slot-enable input:checked+.slot-enable-icon [data-eye="open"]{display:block;color:var(--ok)}
+.slot-enable input:checked+.slot-enable-icon [data-eye="off"]{display:none}
+.slot [data-slot-copy][hidden]{display:none!important}
+.slot-enable input:focus-visible+.slot-enable-icon{outline:2px solid var(--accent);outline-offset:2px}
+.slot-column :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.slot-dock .slot img{width:42px;height:42px}
+.slot-family{font-size:10px;line-height:1.2;max-width:100%;white-space:normal;text-align:center;min-height:12px}
+.slot.drop-ready{outline:3px solid var(--accent);outline-offset:2px;background:var(--soft)}
+.glyph-open[draggable=true],.shape-source{cursor:grab}
+.glyph-open[draggable=true]:active,.shape-source:active{cursor:grabbing}
+.shape-palette{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:14px 0 20px}
+.shape-source{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0;min-height:84px;padding:9px 5px;background:white}
+.shape-source span{font-size:10px;line-height:1.25;text-align:center}
+.shape-source img{display:block;width:36px;height:36px}
+.match-control{font-size:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.match-control select{font-size:12px;min-width:0;max-width:100%}
+.api-example{border-top:1px solid var(--rule);padding:8px 0;min-width:0;max-width:100%}.api-example summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:13px;color:var(--accent);overflow-wrap:anywhere;word-break:break-word;min-width:0}.reference-text{white-space:pre-wrap;overflow-wrap:anywhere}.expanded-reference{margin-top:35px}
+.matches-title{font-family:Georgia,serif;font-weight:normal;font-size:23px;margin:20px 0 8px}
+.planet-result>div:not(.planet-art){min-width:0;overflow-wrap:anywhere}
+.planet-result small{display:block;font-size:10px;color:var(--muted);margin-top:5px}
+.planet-result button{flex-shrink:0}
+/* Workshop only: native reading order is 1/2 above 3/4. The input and eye
+   remain outside each square artwork border, in the corresponding quadrant. */
+.workshop-layout{grid-template-columns:minmax(0,1fr)}
+[data-page="workshop.html"] .masthead{position:relative}
+.workshop-composition{display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:20px;align-items:stretch;min-width:0;overflow-x:auto}
+.workshop-composition .slot-dock{padding:0;margin:0;border:0}
+.workshop-composition .slots{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 6px}
+.workshop-composition .slot{height:auto;min-height:0;aspect-ratio:1;position:relative;padding:0;gap:0;border-radius:0;background:var(--panel)}
+.workshop-composition .slot[data-active=true]{box-shadow:inset 0 0 0 1px var(--accent)}
+.workshop-composition [data-slot-select]{position:absolute;top:4px;left:6px;z-index:2;min-height:32px;padding:3px 6px}
+.workshop-composition [data-slot-art]{width:100%;height:100%;flex:none;gap:0;padding:28px 12px 38px}
+.workshop-composition .slot-art{width:100%;height:100%;min-height:0;flex:1}
+.workshop-composition .slot-art img{width:auto;height:100%;object-fit:contain;max-width:180px;max-height:180px;aspect-ratio:1}
+.workshop-composition .slot strong{position:absolute;bottom:21px;font-size:15px;line-height:18px}
+.workshop-composition .slot-family{position:absolute;bottom:7px;max-width:calc(100% - 70px);font-size:9px;line-height:11px;min-height:0}
+.workshop-composition .slot-actions{position:absolute;right:2px;bottom:2px}
+.workshop-composition [data-slot-clear]{width:36px;min-height:36px;background:var(--panel)}
+.workshop-composition .slot-controls{margin-top:5px;gap:7px}
+.workshop-composition .slot-controls input[data-slot-input]{width:58px;min-height:36px;height:36px}
+.workshop-composition .slot-enable{width:36px;height:36px}
+.workshop-composition .slot-enable-icon{width:32px;height:32px}
+.workshop-composition .workbench{min-width:0;margin:0;padding:18px 20px;border-radius:5px}
+.workshop-composition .dock-caption{align-items:start;flex-direction:column;gap:10px}
+.workshop-composition .dock-actions{flex-wrap:wrap}
+.workshop-composition .dock-caption button{font-size:12px;min-height:40px}
+.workshop-composition .search-logic{margin:16px 0;padding:12px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.workshop-composition .join-control select{min-height:36px;max-width:100%}
+.workshop-composition .mode-row{gap:10px 16px;margin-bottom:12px}
+.workshop-composition .mode-row .star-input{margin-left:0;flex-basis:100%}
+.workshop-composition .star-input input{width:150px;min-width:0}
+.workshop-composition .match-control{gap:6px}
+.workshop-composition .match-control select{width:100%;font-size:12px}
+.shape-panel{margin-top:24px;padding:16px;border:1px solid var(--rule);border-radius:5px;background:var(--panel);min-width:0}
+.shape-panel h2{font-family:Georgia,serif;font-size:20px;font-weight:normal;margin:0 0 8px}
+.shape-panel .notice{margin:0 0 12px}
+.shape-panel .shape-palette{grid-template-columns:repeat(12,minmax(0,1fr));gap:6px;margin:0}
+.shape-panel .shape-source{min-height:84px;padding:8px 3px;gap:6px}
+.shape-panel .shape-source span{overflow-wrap:anywhere}
+.workshop-composition #compose-art{display:none!important}
+.workshop-composition .compose-name{font-size:25px;margin:12px 0 5px}
+.workshop-composition .notice{margin:10px 0;line-height:1.45}
+.workshop-composition .bench-actions{gap:6px;margin-top:12px}
+.workshop-composition .bench-actions button{font-size:12px;padding:8px 10px}
+.workshop-composition .api-status{margin:12px 0 0}
+.workshop-matches{margin:26px 0 32px;border-top:1px solid var(--rule)}
+@media(min-width:761px) and (max-width:1100px){.shape-panel .shape-palette{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(max-width:760px){
+
+ .workshop-composition .slots{gap:10px 5px}
+ .workshop-composition .slot{height:auto;min-height:0;padding:0}
+ .workshop-composition [data-slot-select]{top:0;left:2px;min-height:28px;padding:2px 4px}
+ .workshop-composition [data-slot-art]{padding:25px 9px 36px}
+ .workshop-composition .slot-art img{width:auto;height:100%;max-width:100%;max-height:100%}
+ .workshop-composition .slot strong{font-size:14px}
+ .workshop-composition .slot-family{font-size:8px!important;max-width:calc(100% - 50px)}
+ .workshop-composition .slot-controls input[data-slot-input]{min-height:44px;height:44px}
+ .workshop-composition .slot-enable{width:44px;height:44px}
+ .workshop-composition [data-slot-clear]{width:36px;min-height:36px}
+ .workshop-composition .workbench{padding:14px}
+ .shape-panel{padding:12px}
+ .shape-panel .shape-palette{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .workshop-composition .dock-caption button,.workshop-composition .join-control select{min-height:44px}
+ .workshop-composition .match-control{display:flex}
+ .workshop-composition .match-control select{margin-top:0}
+}
+
+
+/* Independent sources, a single row map, and full-width actions. */
+.shape-panel{margin:0 0 22px;padding:12px}
+.shape-panel h2{font-size:17px}
+.shape-panel .shape-source{min-height:72px;padding:6px 2px}
+.workshop-actions{display:flex;flex-wrap:wrap;gap:8px;width:100%;margin:20px 0 0;padding:14px 0;border-top:1px solid var(--rule)}
+.workshop-actions button{min-height:44px}
+/* DOM and focus order: Refresh, flexible search, Type, Shape, Reset, count. */
+.workshop-matches{margin-top:20px;padding-top:14px;border-top:1px solid var(--rule)}
+.workshop-matches .workshop-actions{display:grid;grid-template-columns:max-content minmax(150px,1fr) max-content minmax(110px,145px) max-content minmax(0,72px);align-items:end;gap:8px;margin:12px 0 8px;padding:0;border:0}
+.workshop-matches .workshop-actions button{justify-self:start;width:max-content;max-width:100%;flex:0 0 auto;font-size:12px;padding:8px 10px}
+/* Search uses the remaining row width, not a syllable-sized character cap. */
+.workshop-actions .filters #search{box-sizing:border-box;width:100%;min-width:0;padding-inline:8px}
+/* Keep useful separation, without stacking margins on an empty result list. */
+.workshop-matches{margin-bottom:12px}
+.workshop-matches .result-list:empty{margin-top:0}
+.workshop-actions .filters>label{min-width:0}
+.workshop-actions .filters .count{width:auto;margin:0;white-space:normal;overflow-wrap:anywhere}
+.workshop-actions .filters{display:contents}
+.workshop-actions .filters>label:first-child{grid-column:auto;min-width:0}
+.workshop-actions .filters select{min-width:0;width:100%}
+.workshop-actions .filters .count{grid-column:auto}
+.workshop-actions #find-planets{white-space:nowrap}
+@media(max-width:760px){.workshop-matches .workshop-actions{display:flex;flex-wrap:wrap;align-items:end}.workshop-matches .workshop-actions button{flex:0 0 auto}.workshop-matches .workshop-actions .filters>label{flex:0 1 auto;max-width:100%}.workshop-matches .workshop-actions .filters>label:first-child{flex:1 1 180px;min-width:min(180px,100%)}.workshop-actions .filters select{width:auto}.workshop-actions .filters .count{flex:0 1 auto}}
+#validate[hidden],#save-composition[hidden]{display:none!important}
+.workshop-composition{align-items:stretch}
+.workshop-composition .workbench{align-self:stretch;display:flex;flex-direction:column;justify-content:flex-start}
+.workshop-composition .search-logic{display:block;margin:10px 0;padding:10px 0}
+.row-mini{display:grid;grid-template-columns:64px 64px 64px;grid-template-rows:58px 36px 58px;gap:3px;justify-content:center;align-items:center;width:max-content;max-width:100%;margin:auto}
+.mini-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;height:58px}
+.mini-cell[data-active=false]{opacity:.35}
+.mini-cell img{width:32px;height:32px;object-fit:contain}
+.mini-cell small{font-size:10px;white-space:nowrap}
+.mini-cell[data-condition-slot="0"]{grid-area:1/1}
+.mini-cell[data-condition-slot="1"]{grid-area:1/3}
+.mini-cell[data-condition-slot="2"]{grid-area:3/1}
+.mini-cell[data-condition-slot="3"]{grid-area:3/3}
+.row-mini .join-control{display:flex;justify-content:center;position:relative;margin:0;padding:0;border:0}
+.row-mini .join-control:before{content:"";position:absolute;left:-8px;right:-8px;height:1px;background:var(--rule)}
+.row-mini .row-join-1{grid-area:1/2}.row-mini .row-join-2{grid-area:2/2}.row-mini .row-join-3{grid-area:3/2}
+.row-mini .row-join-2:before{left:50%;right:auto;width:1px;height:50px}
+.row-mini select{position:relative;min-height:34px;font-size:11px;padding:3px;width:60px;background:var(--panel)}
+.row-mini select:disabled{opacity:.4}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* Keep the assembly and its existing filter card adjacent, including in panes.
+   Below the usable two-panel minimum, scroll only this row, never the page. */
+@media(max-width:760px){.shape-panel .shape-palette{grid-template-columns:repeat(4,minmax(0,1fr))}.shape-panel .shape-source{min-height:78px}.workshop-actions{gap:6px}.workshop-actions button{flex:1;font-size:11px;padding:7px}.row-mini select{min-height:44px}.row-mini{grid-template-rows:58px 44px 58px}}
+
+/* One outer-edge contract for sources, assembly + filters, and results.
+   The document keeps its normal scroll; only a too-narrow composition row
+   retains its existing local horizontal overflow. */
+[data-page="workshop.html"] main{--workshop-content-width:100%}
+.shape-panel,.workshop-composition,.workshop-matches{width:min(100%,var(--workshop-content-width));margin-left:auto;margin-right:auto}
+.workshop-matches .matches-title{margin:0 0 8px}
+
+/* Desktop uses a height-aware outer-width cap; near-square windows can
+   still fill the available main width before reaching that cap.
+   Reserve 440px for nav, title/intro, palette, external input rows and the
+   results heading. This is a sizing budget, not a rendered-height claim. */
+@media(min-width:761px){
+[data-page="workshop.html"] main{--board-width:clamp(340px,calc(100dvh - 440px),460px);--workshop-content-width:calc(2 * var(--board-width) + 16px)}
+[data-page="workshop.html"] .layout{padding-top:12px}
+[data-page="workshop.html"] .header-inner{padding-top:10px;padding-bottom:6px}
+[data-page="workshop.html"] .page-head{margin-bottom:10px}
+[data-page="workshop.html"] h1{font-size:30px;margin-bottom:5px}
+[data-page="workshop.html"] .eyebrow{margin-bottom:5px}
+.shape-panel{padding:8px 10px;margin-bottom:10px}
+.shape-panel h2{margin-bottom:4px}
+.shape-panel .shape-palette{grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}
+.shape-panel .shape-source{min-height:64px;padding:4px 2px;gap:4px}
+.workshop-composition{grid-template-columns:repeat(2,minmax(260px,1fr));gap:16px}
+/* Keep the real filter controls readable by placing the single mini-map
+   beside them, not by clipping or scrolling the card internally. */
+.workshop-composition .workbench{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto auto auto auto auto;align-content:start;column-gap:8px;row-gap:4px;padding:10px}
+.workshop-composition .dock-caption{grid-column:1/-1;grid-row:1;gap:0;margin:0}
+.workshop-composition .dock-caption button{min-height:36px;padding:5px 9px}
+.workshop-composition .search-logic{grid-column:1;grid-row:2/4;margin:0;padding:4px 0;border:0}
+.workshop-composition .row-mini{grid-template-columns:42px 54px 42px;grid-template-rows:58px 36px 58px;gap:3px}
+.workshop-composition .row-mini select{width:54px}
+.workshop-composition .mode-row{grid-column:2;grid-row:2;gap:4px;margin:0;align-content:start}
+.workshop-composition .mode-row label{font-size:12px;gap:5px}
+.workshop-composition .mode-row .star-input{flex-basis:100%;gap:4px}
+.workshop-composition .star-input input{width:100%;min-height:36px;padding:6px}
+.workshop-composition .match-control{grid-column:2;grid-row:3;align-self:start;font-size:12px;gap:4px}
+.workshop-composition .match-control select{min-height:36px;padding:6px}
+.workshop-composition .compose-name{grid-column:1/-1;grid-row:4;font-size:21px;margin:2px 0 0}
+.workshop-composition .compose-status{grid-column:1/-1;grid-row:5;font-size:12px;line-height:1.35}
+.workshop-composition .api-status{grid-column:1/-1;grid-row:6;margin:0;font-size:12px}
+.workshop-composition .notice{margin:4px 0;line-height:1.35;font-size:12px}
+/* Explicit square image boxes; the drag target remains the whole square. */
+.workshop-composition .slot-art img{width:min(130px,calc(var(--board-width)/2 - 74px));height:min(130px,calc(var(--board-width)/2 - 74px));aspect-ratio:1;max-width:100%;max-height:100%}
+.workshop-matches{margin-top:10px;padding-top:8px}
+}

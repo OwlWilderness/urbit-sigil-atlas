@@ -1,0 +1,15 @@
+*
+!Dockerfile
+!package.json
+!package-lock.json
+!server/
+!server/index.cjs
+!server/data/
+!server/data/**
+!site/
+!site/**
+site/reference/
+site/reference/**
+!runtime/
+!runtime/**
+!LICENSE

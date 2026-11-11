@@ -1,0 +1,127 @@
+{
+  "status": "Retained content hashes only; original upstream import revisions are not established.",
+  "files": [
+    {
+      "path": "native/upstream/base/app/dojo.hoon",
+      "sha256": "707248e66a8fbd989fbc062608f358d74b389034caf626ea51aedfa67566984e"
+    },
+    {
+      "path": "native/upstream/base/gen/hood/commit.hoon",
+      "sha256": "fffb7d966ba9da8235ff563eeedf58d84aa112fd8714c04cf5b307975f302cf4"
+    },
+    {
+      "path": "native/upstream/base/lib/default-agent.hoon",
+      "sha256": "70a8af06601e8d1b75b261b2ac8b2cb06d5622baa1d1b1f8fec9236ce167d113"
+    },
+    {
+      "path": "native/upstream/base/lib/hood/kiln.hoon",
+      "sha256": "22f517213f2c22fa9e70eb0ba259bce9d0c81e3c9c9a7f6ecaa199e7c40fc842"
+    },
+    {
+      "path": "native/upstream/base/lib/skeleton.hoon",
+      "sha256": "c7c654a91c5dc1a535d4a76b019ec175955e52961b1ddff70ad49121208d20f5"
+    },
+    {
+      "path": "native/upstream/base/lib/strandio.hoon",
+      "sha256": "3408c7d279bea54f3aee9c2db61f6353522da1e37d31a5cd58aca43fd79d2ef7"
+    },
+    {
+      "path": "native/upstream/base/mar/bill.hoon",
+      "sha256": "a0196da4970b8dfdee321a638040a564f95e8000f3b49eccc274ee8de2fae0ff"
+    },
+    {
+      "path": "native/upstream/base/mar/hoon.hoon",
+      "sha256": "ab057f42ca55cb2228abe95cb6ac10cdfca608931e640fd9b5d1c8c1e3faf997"
+    },
+    {
+      "path": "native/upstream/base/mar/json.hoon",
+      "sha256": "1a9b61feb7d40dc94e682ba665c9f8d5d37c458868942d3b9e7b87562e538fc6"
+    },
+    {
+      "path": "native/upstream/base/mar/kelvin.hoon",
+      "sha256": "f23c0150f240d040dd24d99bb54e02c4df736e0f4d2bd5654bbc304082c8125c"
+    },
+    {
+      "path": "native/upstream/base/mar/mime.hoon",
+      "sha256": "f1b94f43735fd3a6b86f5cd4619851bc1af9145281f68a07724c4bea870de535"
+    },
+    {
+      "path": "native/upstream/base/mar/noun.hoon",
+      "sha256": "7581328f74894baa376d3a80e370808dca3ad3af96bc0ef6e4ac299984744b89"
+    },
+    {
+      "path": "native/upstream/base/mar/txt.hoon",
+      "sha256": "cb76a42e114f3b8f3ac37d09bfe7b1b41bc5c54e6406c0c01fb249af6910bc5d"
+    },
+    {
+      "path": "native/upstream/base/sys/hoon.hoon",
+      "sha256": "ef538ced0877230f02ff86f9fb7a0abc6833bb1cf0e8675742b4d6ce478fcc92"
+    },
+    {
+      "path": "native/upstream/base/sys/zuse.hoon",
+      "sha256": "eeb392d750757ec91aa3848d5a35ad4ba20557be85e62293fc63f72933343d73"
+    },
+    {
+      "path": "native/upstream/landscape/lib/docket.hoon",
+      "sha256": "031be1e2e944835a3d11a90f26c6c61f9bbd40123d2dd249ff7b728acbb1d025"
+    },
+    {
+      "path": "native/upstream/landscape/mar/docket-0.hoon",
+      "sha256": "4b3e47032694e121e73ec341b388b94c43580f2002086b3c006b62d00debd5cc"
+    },
+    {
+      "path": "native/upstream/landscape/sur/docket.hoon",
+      "sha256": "dd930bf411fa129551bf78496b23a96e19743ec4534f4a08bfa37c92c71fc029"
+    }
+  ],
+  "deskCopies": [
+    {
+      "desk": "native/desk/lib/default-agent.hoon",
+      "reference": "native/upstream/base/lib/default-agent.hoon"
+    },
+    {
+      "desk": "native/desk/lib/docket.hoon",
+      "reference": "native/upstream/landscape/lib/docket.hoon"
+    },
+    {
+      "desk": "native/desk/lib/skeleton.hoon",
+      "reference": "native/upstream/base/lib/skeleton.hoon"
+    },
+    {
+      "desk": "native/desk/mar/bill.hoon",
+      "reference": "native/upstream/base/mar/bill.hoon"
+    },
+    {
+      "desk": "native/desk/mar/docket-0.hoon",
+      "reference": "native/upstream/landscape/mar/docket-0.hoon"
+    },
+    {
+      "desk": "native/desk/mar/hoon.hoon",
+      "reference": "native/upstream/base/mar/hoon.hoon"
+    },
+    {
+      "desk": "native/desk/mar/json.hoon",
+      "reference": "native/upstream/base/mar/json.hoon"
+    },
+    {
+      "desk": "native/desk/mar/kelvin.hoon",
+      "reference": "native/upstream/base/mar/kelvin.hoon"
+    },
+    {
+      "desk": "native/desk/mar/mime.hoon",
+      "reference": "native/upstream/base/mar/mime.hoon"
+    },
+    {
+      "desk": "native/desk/mar/noun.hoon",
+      "reference": "native/upstream/base/mar/noun.hoon"
+    },
+    {
+      "desk": "native/desk/mar/txt.hoon",
+      "reference": "native/upstream/base/mar/txt.hoon"
+    },
+    {
+      "desk": "native/desk/sur/docket.hoon",
+      "reference": "native/upstream/landscape/sur/docket.hoon"
+    }
+  ]
+}

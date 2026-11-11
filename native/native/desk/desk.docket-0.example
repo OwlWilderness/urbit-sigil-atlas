@@ -1,0 +1,9 @@
+:~  title+'Sigformel'
+    info+'Browse Urbit glyphs and discover planet names.'
+    color+0x24.3c31
+    base+'sigformel'
+    glob-ames+[PUBLISHER_SHIP 0v0]
+    version+[0 1 1]
+    website+'https://sigformel.quantumtekh.com'
+    license+'Bundled third-party assets retain their notices'
+==

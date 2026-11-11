@@ -1,0 +1,15 @@
+{
+  "name": "sigformel-web.public.dappnode.eth",
+  "version": "0.1.2",
+  "type": "service",
+  "license": "MIT",
+  "architectures": [
+    "linux/amd64"
+  ],
+  "mainService": "web",
+  "description": "Standalone Sigformel glyph catalogue and full stateless name workshop, with private Dappnode Open UI and separate public-host support. Browser-local shortlist/preferences; no shared server records, ship or host ports.",
+  "links": {
+    "ui": "http://web.sigformel-web.public.dappnode.private:8088"
+  },
+  "gettingStarted": "Open UI uses http://web.sigformel-web.public.dappnode.private:8088 on your Dappnode private network. The separate public website is https://sigformel.quantumtekh.com via the existing connector preserving Host sigformel.quantumtekh.com. Private access does not require the public route. Both modes support same-origin stateless compose; browser preferences and shortlist are separate per origin and are not transferred or synchronized. No account, setup secret, shared records or volume. Independent of the native moon app. First-party MIT and separate third-party notices apply. Version 0.1.1 corrects 0.1.0 public-only Open UI/ingress; live upgrade and route checks are separate operator steps."
+}
