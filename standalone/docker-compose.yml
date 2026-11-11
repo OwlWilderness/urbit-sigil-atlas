@@ -1,0 +1,24 @@
+{
+  "version": "3.5",
+  "services": {
+    "web": {
+      "image": "web.sigformel-web.public.dappnode.eth:0.1.2",
+      "build": {
+        "context": ".",
+        "dockerfile": "Dockerfile"
+      },
+      "restart": "unless-stopped",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "logging": {
+        "driver": "none"
+      },
+      "stop_signal": "SIGTERM",
+      "stop_grace_period": "10s"
+    }
+  }
+}
