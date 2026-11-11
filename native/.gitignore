@@ -1,0 +1,36 @@
+# Dependencies / generated frontend
+node_modules/
+native/public/
+native/frontend-manifest.json
+__pycache__/
+*.py[cod]
+.DS_Store
+# Private state / operations (never public inputs)
+private-prep/
+PUBLIC-PREP-HANDOFF.md
+var/
+piers/
+.urb/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.log
+*.zip
+*.tar
+*.tar.gz
+native/evidence/
+native/artifacts/
+deployment/
+implementation-progress.md
+IMPLEMENTATION-HANDOFF.md
+docs/checkpoint.md
+docs/resume-prompt.txt
+
+# Private release records and owner-bound distribution metadata
+private-release/
+MIT-RELEASE-HANDOFF.md
+native/desk/desk.docket-0
+PACKAGE-MANIFEST.json
+GALL-COLLISION-CHECK.md
